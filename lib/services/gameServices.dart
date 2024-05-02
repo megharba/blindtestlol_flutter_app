@@ -5,34 +5,30 @@ import 'package:http/http.dart' as http;
 import '../models/models.dart';
 
 class GameService {
-  String baseUrl ="http://localhost:8080/";
+  String baseUrl = "http://localhost:8080/";
 
   GameService(this.baseUrl);
 
   Future<GameResponse> createGame(String playerName, int roundToPlay) async {
-    final url = Uri.parse('$baseUrl/game/create');
-    final Map<String, dynamic> requestBody = {
-      'playerName': playerName,
-      'roundToPlay': roundToPlay,
-    };
+    final url = Uri.parse(
+        '$baseUrl/game/create?playerName=$playerName&roundToPlay=$roundToPlay');
 
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(requestBody),
     );
 
     if (response.statusCode != 200) {
+      print('Error response: ${response.body}');
       throw Exception('Failed to create game: ${response.statusCode}');
     }
 
     final Map<String, dynamic> responseBody = jsonDecode(response.body);
-    final GameResponse gameResponse = GameResponse.fromJson(responseBody);
-
-    return gameResponse;
+    return GameResponse.fromJson(responseBody);
   }
 
-  Future<void> postPlayerResponse(String gameId, PlayerResponse playerResponse) async {
+  Future<void> postPlayerResponse(
+      String gameId, PlayerResponse playerResponse) async {
     final url = Uri.parse('$baseUrl/game/player-response?gameId=$gameId');
     final response = await http.post(
       url,
@@ -76,7 +72,8 @@ class GameService {
   void handleServerResponse(GameResponse gameResponse) {
     print('Received server response:');
     print('Game ID: ${gameResponse.gameId}');
-    print('Player: ${gameResponse.player.name}, Score: ${gameResponse.player.score}');
+    print(
+        'Player: ${gameResponse.player.name}, Score: ${gameResponse.player.score}');
     print('Round to play: ${gameResponse.roundToPlay}');
     print('Round: ${gameResponse.round}');
     print('Music played: ${gameResponse.musicPlayed}');
