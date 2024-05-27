@@ -63,9 +63,9 @@ flutter:
     - assets/images/Poro_base_AN_idle3.mp4
     - assets/images/logo.png
     - assets/images/esgi2.png
-    - assets/images/footer_artwork.png
     - assets/images/decorator-hr-lg.png
-    
+    - assets/images/characters.png
+    - assets/song/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
