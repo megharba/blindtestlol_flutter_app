@@ -27,6 +27,7 @@ flutter:
   assets:
     - assets/images/Poro_base_AN_idle3.mp4
     - assets/images/logo.png
+    - assets/images/title.png
     - assets/images/esgi2.png
     - assets/images/decorator-hr-lg.png
     - assets/images/characters.png

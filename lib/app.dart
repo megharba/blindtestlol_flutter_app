@@ -10,16 +10,43 @@ import 'services/gameServices.dart'; // Ensure this path is correct
 
 void main() => runApp(MyApp());
 
+class AppColors {
+  static const Color colorBackground = Color.fromARGB(255, 0, 0, 0);
+  static const Color colorText = Color(0xFFEAE4D8);
+  static const Color colorTextTitle = Color(0xFFC8AA6E);
+}
+
+class AppText {
+  static const String Title = 'THEME OF LEGENDS';
+  static const String labelIdentifiant = 'IDENTIFIANT';
+  static const String labelInscription = 'INSCRIPTION';
+  static const String labelConnexion = 'CONNEXION';
+  static const String labelPassword = 'MOT DE PASSE';
+  static const String labelEmail = 'EMAIL';
+}
+
+class ImageAssets {
+  static const String logo = 'assets/images/logo.png';
+  static const String sonaGif = 'assets/images/sona.gif';
+  static const String esgiLogo = 'assets/images/esgi2.png';
+  static const String Soulignement = 'assets/images/decorator-hr-lg.png';
+  static const String Title = 'assets/images/title.png';
+}
+
+class Mp4Assets {
+  static const VideoPlayerController = 'assets/images/Poro_base_AN_idle3.mp4';
+}
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Theme of Legends',
+      title: AppText.Title,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.amber,
-        scaffoldBackgroundColor: const Color(0xFF1C1B1F),
+        scaffoldBackgroundColor: AppColors.colorBackground,
       ),
       home: LoadingPage(),
     );
@@ -37,14 +64,13 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     super.initState();
-    _controller =
-        VideoPlayerController.asset('assets/images/Poro_base_AN_idle3.mp4')
-          ..initialize().then((_) {
-            _controller.setVolume(0.0);
-            _controller.play();
-            _controller.setLooping(true);
-            setState(() {});
-          });
+    _controller = VideoPlayerController.asset(Mp4Assets.VideoPlayerController)
+      ..initialize().then((_) {
+        _controller.setVolume(0.0);
+        _controller.play();
+        _controller.setLooping(true);
+        setState(() {});
+      });
 
     Timer(const Duration(seconds: 3), () {
       if (mounted) {
@@ -85,32 +111,21 @@ class _LoadingPageState extends State<LoadingPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/esgi2.png',
-                        width: 80, height: 80),
+                    Image.asset(ImageAssets.esgiLogo, width: 80, height: 80),
                     const SizedBox(width: 10),
-                    Image.asset('assets/images/logo.png',
-                        width: 80, height: 80),
+                    Image.asset(ImageAssets.logo, width: 80, height: 80),
                   ],
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  'BIENVENUE SUR',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFC89B3C),
-                  ),
-                ),
-                const Text(
-                  'THEME OF LEGENDS',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFC89B3C),
-                    fontSize: 20,
-                  ),
+                //ag - replace ici
+                Image.asset(
+                  ImageAssets.Title, // Chemin de ton image unique
+                  width: 300, // Ajuste la largeur selon tes besoins
+                  height: 75, // Ajuste la hauteur selon tes besoins
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Image.asset('assets/images/decorator-hr-lg.png',
+                  child: Image.asset(ImageAssets.Soulignement,
                       fit: BoxFit.fitWidth),
                 ),
               ],
@@ -121,7 +136,6 @@ class _LoadingPageState extends State<LoadingPage> {
     );
   }
 }
-
 
 class LoginPage extends StatefulWidget {
   @override
@@ -137,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0E1013),
+      backgroundColor: AppColors.colorBackground,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -145,29 +159,18 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset(
-                'assets/images/logo.png',  // Assurez-vous que ce chemin est correct
+                ImageAssets.logo, // Assurez-vous que ce chemin est correct
                 height: 100,
               ),
               const SizedBox(height: 20),
-              const Text(
-                'BIENVENUE SUR',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFC89B3C),
-                  fontSize: 16,
-                ),
-              ),
-              const Text(
-                'THEME OF LEGENDS',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFC89B3C),
-                  fontSize: 24,
-                ),
+              Image.asset(
+                ImageAssets.Title, // Chemin de ton image unique
+                width: 300, // Ajuste la largeur selon tes besoins
+                height: 75, // Ajuste la hauteur selon tes besoins
               ),
               const SizedBox(height: 20),
               const Divider(
-                color: Color(0xFFC89B3C),
+                color: AppColors.colorTextTitle,
                 thickness: 1,
               ),
               const SizedBox(height: 20),
@@ -177,13 +180,13 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     _buildTextField(
                       controller: _nameController,
-                      labelText: 'IDENTIFIANT',
+                      labelText: AppText.labelIdentifiant,
                       obscureText: false,
                     ),
                     const SizedBox(height: 20),
                     _buildTextField(
                       controller: _passwordController,
-                      labelText: 'MOT DE PASSE',
+                      labelText: AppText.labelPassword,
                       obscureText: true,
                     ),
                     const SizedBox(height: 20),
@@ -191,11 +194,12 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: _isLoading ? null : _login,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF0E1013),
-                        side: BorderSide(color: Color(0xFFC89B3C)),
+                        side: BorderSide(color: AppColors.colorTextTitle),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 15),
                       ),
                       child: _isLoading
                           ? CircularProgressIndicator()
@@ -203,14 +207,15 @@ class _LoginPageState extends State<LoginPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Image.asset(
-                                  'assets/images/logo.png',  // Assurez-vous que ce chemin est correct
+                                  ImageAssets
+                                      .logo, // Assurez-vous que ce chemin est correct
                                   height: 50,
                                 ),
                                 const SizedBox(width: 3),
                                 const Text(
-                                  'CONNEXION',
+                                  AppText.labelConnexion,
                                   style: TextStyle(
-                                    color: Color(0xFFC89B3C),
+                                    color: AppColors.colorText,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -221,25 +226,42 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => RegisterPage()),
-                  );
-                },
-                child: const Text(
-                  'INSCRIPTION',
-                  style: TextStyle(color: Color(0xFFC89B3C)),
-                ),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40.0),
+                    child: Image.asset(
+                      ImageAssets.Soulignement,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => RegisterPage()),
+                      );
+                    },
+                    child: Text(
+                      AppText.labelInscription,
+                      style: TextStyle(
+                        color: AppColors.colorText,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 1),
+              const SizedBox(height: 20),
               LayoutBuilder(
                 builder: (context, constraints) {
-                  double imageHeight = constraints.maxWidth * 0.75;  // 50% de la largeur du parent
-                  return Image.asset(
-                    'assets/images/characters.png',  // Assurez-vous que ce chemin est correct
+                  double imageHeight = constraints.maxWidth *
+                      0.75; // 50% de la largeur du parent
+                  return Image.network(
+                    ImageAssets
+                        .sonaGif, // Assurez-vous que ce chemin est correct
                     height: imageHeight,
-                    width: constraints.maxWidth,  // S'adapte à la largeur du parent
+                    width:
+                        constraints.maxWidth, // S'adapte à la largeur du parent
                     fit: BoxFit.contain,
                   );
                 },
@@ -251,24 +273,28 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildTextField({required TextEditingController controller, required String labelText, required bool obscureText}) {
+  Widget _buildTextField(
+      {required TextEditingController controller,
+      required String labelText,
+      required bool obscureText}) {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
-      style: TextStyle(color: Color(0xFFC89B3C)),
+      style: TextStyle(color: AppColors.colorText),
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: TextStyle(color: Color(0xFFC89B3C)),
+        labelStyle: TextStyle(color: AppColors.colorTextTitle),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFFC89B3C)),
-          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide(color: AppColors.colorTextTitle),
+          borderRadius: BorderRadius.all(Radius.circular(0)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFFC89B3C)),
-          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide(color: AppColors.colorTextTitle),
+          borderRadius: BorderRadius.all(Radius.circular(0)),
         ),
       ),
-      validator: (value) => value!.isEmpty ? 'Please enter your $labelText' : null,
+      validator: (value) =>
+          value!.isEmpty ? 'Please enter your $labelText' : null,
     );
   }
 
@@ -318,29 +344,18 @@ class _RegisterPageState extends State<RegisterPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset(
-                'assets/images/logo.png',  // Assurez-vous que ce chemin est correct
+                ImageAssets.logo, // Assurez-vous que ce chemin est correct
                 height: 100,
               ),
               const SizedBox(height: 20),
-              const Text(
-                'BIENVENUE SUR',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFC89B3C),
-                  fontSize: 16,
-                ),
-              ),
-              const Text(
-                'THEME OF LEGENDS',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFC89B3C),
-                  fontSize: 24,
-                ),
+              Image.asset(
+                ImageAssets.Title, // Chemin de ton image unique
+                width: 300, // Ajuste la largeur selon tes besoins
+                height: 75, // Ajuste la hauteur selon tes besoins
               ),
               const SizedBox(height: 20),
               const Divider(
-                color: Color(0xFFC89B3C),
+                color: AppColors.colorText,
                 thickness: 1,
               ),
               const SizedBox(height: 20),
@@ -350,19 +365,19 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: [
                     _buildTextField(
                       controller: _nameController,
-                      labelText: 'IDENTIFIANT',
+                      labelText: AppText.labelIdentifiant,
                       obscureText: false,
                     ),
                     const SizedBox(height: 20),
                     _buildTextField(
                       controller: _emailController,
-                      labelText: 'EMAIL',
+                      labelText: AppText.labelEmail,
                       obscureText: false,
                     ),
                     const SizedBox(height: 20),
                     _buildTextField(
                       controller: _passwordController,
-                      labelText: 'MOT DE PASSE',
+                      labelText: AppText.labelPassword,
                       obscureText: true,
                     ),
                     const SizedBox(height: 20),
@@ -370,11 +385,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       onPressed: _isLoading ? null : _register,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF0E1013),
-                        side: BorderSide(color: Color(0xFFC89B3C)),
+                        side: BorderSide(color: AppColors.colorText),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.all(Radius.circular(0)),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 25),
                       ),
                       child: _isLoading
                           ? CircularProgressIndicator()
@@ -382,16 +398,13 @@ class _RegisterPageState extends State<RegisterPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Image.asset(
-                                  'assets/images/logo.png',  // Assurez-vous que ce chemin est correct
+                                  ImageAssets.logo,
                                   height: 50,
                                 ),
                                 const SizedBox(width: 3),
                                 const Text(
-                                  'INSCRIPTION',
-                                  style: TextStyle(
-                                    color: Color(0xFFC89B3C),
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  AppText.labelInscription,
+                                  style: TextStyle(color: AppColors.colorText),
                                 ),
                               ],
                             ),
@@ -407,18 +420,20 @@ class _RegisterPageState extends State<RegisterPage> {
                   );
                 },
                 child: const Text(
-                  'CONNEXION',
-                  style: TextStyle(color: Color(0xFFC89B3C)),
+                  AppText.labelConnexion,
+                  style: TextStyle(color: AppColors.colorText),
                 ),
               ),
               const SizedBox(height: 1),
               LayoutBuilder(
                 builder: (context, constraints) {
-                  double imageHeight = constraints.maxWidth * 0.75;  // 75% de la largeur du parent
+                  double imageHeight = constraints.maxWidth *
+                      0.75; // 75% de la largeur du parent
                   return Image.asset(
-                    'assets/images/characters.png',  // Assurez-vous que ce chemin est correct
+                    ImageAssets.logo, // Assurez-vous que ce chemin est correct
                     height: imageHeight,
-                    width: constraints.maxWidth,  // S'adapte à la largeur du parent
+                    width:
+                        constraints.maxWidth, // S'adapte à la largeur du parent
                     fit: BoxFit.contain,
                   );
                 },
@@ -430,24 +445,17 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buildTextField({required TextEditingController controller, required String labelText, required bool obscureText}) {
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String labelText,
+    required bool obscureText,
+  }) {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
-      style: TextStyle(color: Color(0xFFC89B3C)),
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: TextStyle(color: Color(0xFFC89B3C)),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFFC89B3C)),
-          borderRadius: BorderRadius.circular(30),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFFC89B3C)),
-          borderRadius: BorderRadius.circular(30),
-        ),
       ),
-      validator: (value) => value!.isEmpty ? 'Please enter your $labelText' : null,
     );
   }
 
@@ -514,33 +522,33 @@ class _HomePageState extends State<HomePage> {
             Row(
               children: [
                 const SizedBox(width: 10),
-                Image.asset('assets/images/esgi2.png', width: 50, height: 50), // Chemin de l'image ESGI
+                Image.asset(ImageAssets.esgiLogo,
+                    width: 50, height: 50), // Chemin de l'image ESGI
                 const SizedBox(width: 10),
-                Image.asset('assets/images/logo.png', width: 50, height: 50), // Chemin de l'image du logo
+                Image.asset(ImageAssets.logo,
+                    width: 50, height: 50), // Chemin de l'image du logo
                 const SizedBox(width: 10),
-                Text(
-                  'THEME OF LEGENDS',
-                  style: TextStyle(
-                    color: Color(0xFFC89B3C),
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Image.asset(
+                  ImageAssets.Title, // Chemin de ton image unique
+                  width: 300, // Ajuste la largeur selon tes besoins
+                  height: 75, // Ajuste la hauteur selon tes besoins
                 ),
               ],
             ),
           ],
         ),
-        backgroundColor: Color(0xFF1C1B1F),
+        backgroundColor: AppColors.colorBackground,
       ),
       body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
-          BottomNavigationBarItem(icon: Icon(Icons.leaderboard), label: 'Classement'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.leaderboard), label: 'Classement'),
           BottomNavigationBarItem(icon: Icon(Icons.info), label: 'À Propos'),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xFFC89B3C),
+        selectedItemColor: AppColors.colorText,
         onTap: _onItemTapped,
       ),
     );
@@ -651,7 +659,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
       style: TextStyle(
         fontSize: 24,
         fontWeight: FontWeight.bold,
-        color: remainingTime <= 5 ? Colors.red : Colors.white,
+        color: remainingTime <= 5 ? Colors.red : AppColors.colorText,
       ),
     );
   }
@@ -740,7 +748,8 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
   void _submitResponse() async {
     if (!_formKey.currentState!.validate()) return;
 
-    await AudioManager.instance.stopMusic(); // Stop current music before submitting
+    await AudioManager.instance
+        .stopMusic(); // Stop current music before submitting
 
     try {
       final GameResponse apiResponse = await gameService.postPlayerResponse(
@@ -748,7 +757,8 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
         musicToken: widget.initialMusicId,
         proposition: _propositionController.text,
         type: _typeController.text,
-        date: _dateController.text,  // Ensure date is not null and is correctly formatted
+        date: _dateController
+            .text, // Ensure date is not null and is correctly formatted
       );
 
       _propositionController.clear();
@@ -799,14 +809,14 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
       appBar: AppBar(
         title: const Text(
           'Answer Phase',
-          style: TextStyle(color: Color(0xFFC89B3C)), // Couleur du texte
+          style: TextStyle(color: AppColors.colorText), // Couleur du texte
         ),
-        backgroundColor: Color(0xFF1C1B1F),
+        backgroundColor: AppColors.colorBackground,
       ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: Color(0xFF1C1B1F),
+        color: AppColors.colorBackground,
         child: Column(
           children: [
             // Barre de progression animée pour les rounds
@@ -818,7 +828,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                   child: LinearProgressIndicator(
                     value: _animation.value,
                     backgroundColor: Colors.grey[800],
-                    color: Color(0xFFC89B3C),
+                    color: AppColors.colorText,
                     minHeight: 10,
                   ),
                 );
@@ -828,7 +838,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
             Text(
               'Round $currentRound of ${widget.totalRounds}',
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.colorText,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -853,15 +863,15 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                     children: [
                       TextFormField(
                         controller: _propositionController,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppColors.colorText),
                         decoration: InputDecoration(
                           labelText: 'Proposition',
-                          labelStyle: TextStyle(color: Colors.white),
+                          labelStyle: TextStyle(color: AppColors.colorText),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                            borderSide: BorderSide(color: AppColors.colorText),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFC89B3C)),
+                            borderSide: BorderSide(color: AppColors.colorText),
                           ),
                         ),
                         validator: (value) =>
@@ -870,43 +880,47 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: _typeController,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppColors.colorText),
                         decoration: InputDecoration(
                           labelText: 'Type',
-                          labelStyle: TextStyle(color: Colors.white),
+                          labelStyle: TextStyle(color: AppColors.colorText),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                            borderSide: BorderSide(color: AppColors.colorText),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.amber),
+                            borderSide: BorderSide(color: AppColors.colorText),
                           ),
                         ),
-                        validator: (value) => value!.isEmpty ? 'Enter a type' : null,
+                        validator: (value) =>
+                            value!.isEmpty ? 'Enter a type' : null,
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: _dateController,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppColors.colorText),
                         decoration: InputDecoration(
                           labelText: 'Date',
-                          labelStyle: TextStyle(color: Colors.white),
+                          labelStyle: TextStyle(color: AppColors.colorText),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                            borderSide: BorderSide(color: AppColors.colorText),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.amber),
+                            borderSide: BorderSide(color: AppColors.colorText),
                           ),
                         ),
-                        validator: (value) => value!.isEmpty ? 'Enter a date' : null,
+                        validator: (value) =>
+                            value!.isEmpty ? 'Enter a date' : null,
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: _submitResponse,
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.black, backgroundColor: Colors.amber,
-                          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                          foregroundColor: AppColors.colorBackground,
+                          backgroundColor: AppColors.colorText,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 15),
                         ),
-                        child: const Text('Submit'),
+                        child: const Text('Envoyer'),
                       ),
                     ],
                   ),
@@ -978,7 +992,7 @@ class _CountdownWidgetState extends State<CountdownWidget>
               animation: _animation,
               builder: (_, __) => Container(
                 decoration: BoxDecoration(
-                  color: Colors.amber.withOpacity(1 - _animation.value),
+                  color: AppColors.colorText.withOpacity(1 - _animation.value),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -989,11 +1003,11 @@ class _CountdownWidgetState extends State<CountdownWidget>
             style: const TextStyle(
               fontSize: 60,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: AppColors.colorText,
               shadows: [
                 Shadow(
                   blurRadius: 10.0,
-                  color: Colors.black,
+                  color: AppColors.colorBackground,
                   offset: Offset(5.0, 5.0),
                 ),
               ],
@@ -1010,14 +1024,15 @@ class GameOverScreen extends StatelessWidget {
   final int combo;
   final String mastery;
 
-  GameOverScreen({required this.score, required this.combo, required this.mastery});
+  GameOverScreen(
+      {required this.score, required this.combo, required this.mastery});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Game Over'),
-        backgroundColor: Color(0xFF1C1B1F),
+        backgroundColor: AppColors.colorBackground,
       ),
       body: Center(
         child: Column(
@@ -1027,7 +1042,8 @@ class GameOverScreen extends StatelessWidget {
             SizedBox(height: 20),
             Text('Score: $score', style: Theme.of(context).textTheme.headline6),
             Text('Combo: $combo', style: Theme.of(context).textTheme.headline6),
-            Text('Mastery: $mastery', style: Theme.of(context).textTheme.headline6),
+            Text('Mastery: $mastery',
+                style: Theme.of(context).textTheme.headline6),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
@@ -1041,7 +1057,6 @@ class GameOverScreen extends StatelessWidget {
     );
   }
 }
-
 
 class AccueilPage extends StatefulWidget {
   final User user;
@@ -1115,12 +1130,12 @@ class _AccueilPageState extends State<AccueilPage> {
               decoration: InputDecoration(
                 labelText: 'Number of Rounds',
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFC89B3C)),
-                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(color: AppColors.colorText),
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFC89B3C)),
-                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(color: AppColors.colorText),
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
                 ),
               ),
               value: roundToPlay,
@@ -1136,7 +1151,9 @@ class _AccueilPageState extends State<AccueilPage> {
                 });
               },
               validator: (value) {
-                return value != null && value > 0 ? null : 'Please select a valid number of rounds';
+                return value != null && value > 0
+                    ? null
+                    : 'Please select a valid number of rounds';
               },
             ),
           ),
@@ -1148,8 +1165,8 @@ class _AccueilPageState extends State<AccueilPage> {
             ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  final GameResponse gameResponse =
-                      await gameService.createGame(widget.user.uid, roundToPlay);
+                  final GameResponse gameResponse = await gameService
+                      .createGame(widget.user.uid, roundToPlay);
                   currentGameId = gameResponse.gameId;
                   currentRound = 1;
                   totalRounds = roundToPlay;
