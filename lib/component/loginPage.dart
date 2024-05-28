@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                                 const Text(
                                   AppText.labelConnexion,
                                   style: TextStyle(
-                                    color: AppColors.colorText,
+                                    color: AppColors.colorTextTitle,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 40.0),
+                    padding: const EdgeInsets.only(top: 50.0),
                     child: Image.asset(
                       ImageAssets.Soulignement,
                     ),

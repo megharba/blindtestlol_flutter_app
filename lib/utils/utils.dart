@@ -16,6 +16,7 @@ class AppText {
   static const String labelConnexion = 'CONNEXION';
   static const String labelPassword = 'MOT DE PASSE';
   static const String labelEmail = 'EMAIL';
+  static const String LabelLancer = 'LANCER';
 }
 
 class ImageAssets {
@@ -24,12 +25,12 @@ class ImageAssets {
   static const String esgiLogo = 'assets/images/esgi2.png';
   static const String Soulignement = 'assets/images/decorator-hr-lg.png';
   static const String Title = 'assets/images/title.png';
+  static const String ImageLegende1 = 'assets/images/legendes/default.jpeg';
 }
 
 class Mp4Assets {
   static const VideoPlayerController = 'assets/images/Poro_base_AN_idle3.mp4';
 }
-
 
 class CountdownWidget extends StatefulWidget {
   final int seconds;
@@ -172,9 +173,6 @@ class _CountdownTimerState extends State<CountdownTimer> {
     );
   }
 }
-
-
-
 
 class AudioManager {
   static final AudioManager _instance = AudioManager._internal();

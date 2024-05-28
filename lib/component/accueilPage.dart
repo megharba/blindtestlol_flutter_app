@@ -143,14 +143,12 @@ class _AccueilPageState extends State<AccueilPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Welcome, ${widget.user.name}!',
+            Text('${widget.user.name}!',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            const Text('This is the home page content specific to you.'),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _startNewGame,
-              child: const Text('Start New Game'),
+              child: const Text(AppText.LabelLancer),
             ),
           ],
         ),

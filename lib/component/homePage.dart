@@ -37,31 +37,64 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Padding(
+        padding: EdgeInsets.zero, // Pas de padding par défaut
+        child: Stack(
           children: [
-            Row(
-              children: [
-                const SizedBox(width: 10),
-                Image.asset(ImageAssets.esgiLogo,
-                    width: 50, height: 50), // Chemin de l'image ESGI
-                const SizedBox(width: 10),
-                Image.asset(ImageAssets.logo,
-                    width: 50, height: 50), // Chemin de l'image du logo
-                const SizedBox(width: 10),
-                Image.asset(
-                  ImageAssets.Title, // Chemin de ton image unique
-                  width: 300, // Ajuste la largeur selon tes besoins
-                  height: 75, // Ajuste la hauteur selon tes besoins
-                ),
-              ],
+            // Le contenu principal de la page
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: _widgetOptions.elementAt(_selectedIndex),
+              ),
+            ),
+            // Le logo en haut à gauche dans le coin de la page
+            Positioned(
+              top: 0.0, // Aucune marge en haut
+              left: -100.0, // Aucune marge à gauche
+              child: Image.asset(
+                ImageAssets.Title, // Chemin de ton image unique
+                width: 450, // Ajuste la largeur selon tes besoins
+                height: 110, // Ajuste la hauteur selon tes besoins
+              ),
+            ),
+            // L'image dans un cercle doré en haut à droite
+            Positioned(
+              top: 10.0, // Marge de 10 pixels en haut
+              right: 10.0, // Marge de 10 pixels à droite
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.amber, // Couleur dorée
+                    ),
+                    child: ClipOval(
+                      child: Image.asset(
+                        ImageAssets.ImageLegende1,
+                        width: 180,
+                        height: 180,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8), // Espacement entre l'image et le pseudo
+                  Text(
+                    widget.user.name, // Utilisation du pseudo de l'utilisateur
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
-        backgroundColor: AppColors.colorBackground,
       ),
-      body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),

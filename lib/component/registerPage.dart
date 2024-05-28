@@ -38,7 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 20),
               const Divider(
-                color: AppColors.colorText,
+                color: AppColors.colorTextTitle,
                 thickness: 1,
               ),
               const SizedBox(height: 20),
@@ -68,12 +68,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       onPressed: _isLoading ? null : _register,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF0E1013),
-                        side: BorderSide(color: AppColors.colorText),
+                        side: BorderSide(color: AppColors.colorTextTitle),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(0)),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 40, vertical: 25),
+                            horizontal: 40, vertical: 15),
                       ),
                       child: _isLoading
                           ? CircularProgressIndicator()
@@ -87,7 +87,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                 const SizedBox(width: 3),
                                 const Text(
                                   AppText.labelInscription,
-                                  style: TextStyle(color: AppColors.colorText),
+                                  style: TextStyle(
+                                      color: AppColors.colorTextTitle,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -96,24 +98,39 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
-                child: const Text(
-                  AppText.labelConnexion,
-                  style: TextStyle(color: AppColors.colorText),
-                ),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50.0),
+                    child: Image.asset(
+                      ImageAssets.Soulignement,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                    child: const Text(
+                      AppText.labelConnexion,
+                      style: TextStyle(
+                        color: AppColors.colorText,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 1),
               LayoutBuilder(
                 builder: (context, constraints) {
                   double imageHeight = constraints.maxWidth *
                       0.75; // 75% de la largeur du parent
-                  return Image.asset(
-                    ImageAssets.logo, // Assurez-vous que ce chemin est correct
+                  return Image.network(
+                    ImageAssets
+                        .sonaGif, // Assurez-vous que ce chemin est correct
                     height: imageHeight,
                     width:
                         constraints.maxWidth, // S'adapte à la largeur du parent
@@ -132,12 +149,20 @@ class _RegisterPageState extends State<RegisterPage> {
     required TextEditingController controller,
     required String labelText,
     required bool obscureText,
+    Color? color,
   }) {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
+      style: TextStyle(
+          color:
+              color ?? AppColors.colorTextTitle), // Utilisation de la couleur
       decoration: InputDecoration(
         labelText: labelText,
+        labelStyle: TextStyle(
+            color:
+                color ?? AppColors.colorTextTitle), // Utilisation de la couleur
+        border: OutlineInputBorder(),
       ),
     );
   }
