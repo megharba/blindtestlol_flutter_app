@@ -14,7 +14,7 @@ class GameOverScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Game Over'),
-        backgroundColor: AppColors.colorBackground,
+        backgroundColor: AppColors.colorNoirHextech,
       ),
       body: Center(
         child: Column(

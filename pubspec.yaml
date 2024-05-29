@@ -28,3 +28,13 @@ flutter:
     - assets/song/
     - assets/images/
     - assets/images/legendes/
+    - assets/images/backgrounds/
+    - assets/musicBackground/heartsteel.mp4
+  fonts:
+    - family: CustomFont1
+      fonts:
+        - asset: lib/utils/font/BeaufortforLOL-OTF/BeaufortforLOL-Bold.otf
+    - family: CustomFont2
+      fonts:
+        - asset: lib/utils/font/Spiegel-OTF/Spiegel-Bold.otf
+    # Ajoutez d'autres fichiers de police selon vos besoins

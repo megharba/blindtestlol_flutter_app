@@ -150,12 +150,12 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
           'Answer Phase',
           style: TextStyle(color: AppColors.colorText), // Couleur du texte
         ),
-        backgroundColor: AppColors.colorBackground,
+        backgroundColor: AppColors.colorNoirHextech,
       ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: AppColors.colorBackground,
+        color: AppColors.colorNoirHextech,
         child: Column(
           children: [
             // Barre de progression animée pour les rounds
@@ -254,7 +254,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                       ElevatedButton(
                         onPressed: _submitResponse,
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: AppColors.colorBackground,
+                          foregroundColor: AppColors.colorNoirHextech,
                           backgroundColor: AppColors.colorText,
                           padding: EdgeInsets.symmetric(
                               horizontal: 50, vertical: 15),

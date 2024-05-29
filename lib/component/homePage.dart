@@ -1,9 +1,9 @@
-import 'package:blindtestlol_flutter_app/component/aProposPage.dart';
+import 'package:flutter/material.dart';
+import 'package:blindtestlol_flutter_app/utils/utils.dart';
 import 'package:blindtestlol_flutter_app/component/accueilPage.dart';
 import 'package:blindtestlol_flutter_app/component/classementPage.dart';
 import 'package:blindtestlol_flutter_app/models/models.dart';
-import 'package:blindtestlol_flutter_app/utils/utils.dart';
-import 'package:flutter/material.dart';
+import 'package:blindtestlol_flutter_app/component/profil.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
@@ -24,7 +24,6 @@ class _HomePageState extends State<HomePage> {
     _widgetOptions = <Widget>[
       AccueilPage(user: widget.user),
       ClassementPage(),
-      AProposPage(),
     ];
   }
 
@@ -34,76 +33,92 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _goToProfile() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Profil(user: widget.user)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.zero, // Pas de padding par défaut
-        child: Stack(
-          children: [
-            // Le contenu principal de la page
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: _widgetOptions.elementAt(_selectedIndex),
-              ),
+      body: Stack(
+        children: [
+          // Background image
+          Positioned.fill(
+            child: Image.asset(
+              ImageAssets.ImageBackground,
+              fit: BoxFit.fill,
             ),
-            // Le logo en haut à gauche dans le coin de la page
-            Positioned(
-              top: 0.0, // Aucune marge en haut
-              left: -100.0, // Aucune marge à gauche
-              child: Image.asset(
-                ImageAssets.Title, // Chemin de ton image unique
-                width: 450, // Ajuste la largeur selon tes besoins
-                height: 110, // Ajuste la hauteur selon tes besoins
-              ),
-            ),
-            // L'image dans un cercle doré en haut à droite
-            Positioned(
-              top: 10.0, // Marge de 10 pixels en haut
-              right: 10.0, // Marge de 10 pixels à droite
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.amber, // Couleur dorée
+          ),
+          // Main content
+          Column(
+            children: [
+              // Header avec le logo et l'image de profil (imagelegende1)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Logo
+                    Image.asset(
+                      ImageAssets.logo,
+                      width: 119,
+                      height: 150,
                     ),
-                    child: ClipOval(
-                      child: Image.asset(
-                        ImageAssets.ImageLegende1,
-                        width: 180,
-                        height: 180,
-                        fit: BoxFit.cover,
+                    SizedBox(width: 8),
+                    // Image de profil (imagelegende1)
+                    GestureDetector(
+                      onTap: _goToProfile,
+                      child: Container(
+                        width: 119,
+                        height: 119,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.amber,
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(
+                            ImageAssets.ImageLegende1,
+                            width: 150,
+                            height: 150,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 8), // Espacement entre l'image et le pseudo
-                  Text(
-                    widget.user.name, // Utilisation du pseudo de l'utilisateur
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+              // Nom de l'utilisateur
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  widget.user.name,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'CustomFont1',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              // Contenu principal de la page
+              Expanded(
+                child: _widgetOptions.elementAt(_selectedIndex),
+              ),
+            ],
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
           BottomNavigationBarItem(
               icon: Icon(Icons.leaderboard), label: 'Classement'),
-          BottomNavigationBarItem(icon: Icon(Icons.info), label: 'À Propos'),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: AppColors.colorText,
+        selectedItemColor: AppColors.colorTextTitle,
         onTap: _onItemTapped,
       ),
     );

@@ -70,7 +70,7 @@ class _AccueilPageState extends State<AccueilPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('New Game for ${widget.user.name}'),
+          title: Text('Nouvelle Partie'),
           content: Form(
             key: _formKey,
             child: DropdownButtonFormField<int>(
@@ -107,7 +107,7 @@ class _AccueilPageState extends State<AccueilPage> {
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel'),
+              child: Text('Annuler'),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -128,7 +128,7 @@ class _AccueilPageState extends State<AccueilPage> {
                   }
                 }
               },
-              child: Text('Start Game'),
+              child: Text(AppText.LabelLancer),
             ),
           ],
         );
@@ -139,18 +139,26 @@ class _AccueilPageState extends State<AccueilPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('${widget.user.name}!',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _startNewGame,
-              child: const Text(AppText.LabelLancer),
-            ),
-          ],
+      body: Container(
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: _startNewGame,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  side: BorderSide(color: Colors.white),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                ),
+                child: const Text(AppText.LabelLancer),
+              ),
+            ],
+          ),
         ),
       ),
     );

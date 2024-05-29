@@ -3,6 +3,7 @@ import 'package:blindtestlol_flutter_app/component/registerPage.dart';
 import 'package:blindtestlol_flutter_app/services/userServices.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:blindtestlol_flutter_app/component/background_video.dart'; // Assurez-vous de remplacer le chemin par celui de votre fichier
 
 class LoginPage extends StatefulWidget {
   @override
@@ -18,124 +19,117 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.colorBackground,
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(
-                ImageAssets.logo, // Assurez-vous que ce chemin est correct
-                height: 100,
-              ),
-              const SizedBox(height: 20),
-              Image.asset(
-                ImageAssets.Title, // Chemin de ton image unique
-                width: 300, // Ajuste la largeur selon tes besoins
-                height: 75, // Ajuste la hauteur selon tes besoins
-              ),
-              const SizedBox(height: 20),
-              const Divider(
-                color: AppColors.colorTextTitle,
-                thickness: 1,
-              ),
-              const SizedBox(height: 20),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    _buildTextField(
-                      controller: _nameController,
-                      labelText: AppText.labelIdentifiant,
-                      obscureText: false,
-                    ),
-                    const SizedBox(height: 20),
-                    _buildTextField(
-                      controller: _passwordController,
-                      labelText: AppText.labelPassword,
-                      obscureText: true,
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _isLoading ? null : _login,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF0E1013),
-                        side: BorderSide(color: AppColors.colorTextTitle),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          BackgroundVideo(),
+          Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset(
+                    ImageAssets.logo, // Assurez-vous que ce chemin est correct
+                    height: 100,
+                  ),
+                  const SizedBox(height: 20),
+                  Image.asset(
+                    ImageAssets.Title, // Chemin de ton image unique
+                    width: 300, // Ajuste la largeur selon tes besoins
+                    height: 75, // Ajuste la hauteur selon tes besoins
+                  ),
+                  const SizedBox(height: 20),
+                  const Divider(
+                    color: AppColors.colorTextTitle,
+                    thickness: 1,
+                  ),
+                  const SizedBox(height: 20),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        _buildTextField(
+                          controller: _nameController,
+                          labelText: AppText.labelIdentifiant,
+                          obscureText: false,
                         ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 40, vertical: 15),
-                      ),
-                      child: _isLoading
-                          ? CircularProgressIndicator()
-                          : Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Image.asset(
-                                  ImageAssets
-                                      .logo, // Assurez-vous que ce chemin est correct
-                                  height: 50,
-                                ),
-                                const SizedBox(width: 3),
-                                const Text(
-                                  AppText.labelConnexion,
-                                  style: TextStyle(
-                                    color: AppColors.colorTextTitle,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                        const SizedBox(height: 20),
+                        _buildTextField(
+                          controller: _passwordController,
+                          labelText: AppText.labelPassword,
+                          obscureText: true,
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: _isLoading ? null : _login,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.colorNoirHextech,
+                            side: BorderSide(color: AppColors.colorTextTitle),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
                             ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 50.0),
-                    child: Image.asset(
-                      ImageAssets.Soulignement,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 40, vertical: 15),
+                          ),
+                          child: _isLoading
+                              ? CircularProgressIndicator()
+                              : Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.asset(
+                                      ImageAssets
+                                          .logo, // Assurez-vous que ce chemin est correct
+                                      height: 50,
+                                    ),
+                                    const SizedBox(width: 3),
+                                    const Text(
+                                      AppText.labelConnexion,
+                                      style: TextStyle(
+                                        color: AppColors.colorTextTitle,
+                                        fontFamily: 'CustomFont2',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                        ),
+                      ],
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => RegisterPage()),
-                      );
-                    },
-                    child: Text(
-                      AppText.labelInscription,
-                      style: TextStyle(
-                        color: AppColors.colorText,
-                        fontWeight: FontWeight.bold,
+                  const SizedBox(height: 20),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 50.0),
+                        child: Image.asset(
+                          ImageAssets.Soulignement,
+                        ),
                       ),
-                    ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => RegisterPage()),
+                          );
+                        },
+                        child: Text(
+                          AppText.labelInscription,
+                          style: TextStyle(
+                            color: AppColors.colorText,
+                            fontFamily: 'CustomFont1',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  double imageHeight = constraints.maxWidth *
-                      0.75; // 50% de la largeur du parent
-                  return Image.network(
-                    ImageAssets
-                        .sonaGif, // Assurez-vous que ce chemin est correct
-                    height: imageHeight,
-                    width:
-                        constraints.maxWidth, // S'adapte à la largeur du parent
-                    fit: BoxFit.contain,
-                  );
-                },
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -147,10 +141,16 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
-      style: TextStyle(color: AppColors.colorText),
+      style: TextStyle(
+        color: AppColors.colorText,
+        fontFamily: 'CustomFont1',
+      ),
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: TextStyle(color: AppColors.colorTextTitle),
+        labelStyle: TextStyle(
+          color: AppColors.colorTextTitle,
+          fontFamily: 'CustomFont1',
+        ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.colorTextTitle),
           borderRadius: BorderRadius.all(Radius.circular(0)),

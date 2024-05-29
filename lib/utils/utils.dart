@@ -7,6 +7,8 @@ class AppColors {
   static const Color colorBackground = Color.fromARGB(255, 0, 0, 0);
   static const Color colorText = Color(0xFFEAE4D8);
   static const Color colorTextTitle = Color(0xFFC8AA6E);
+  static const Color colorTransparent = Colors.transparent;
+  static const Color colorNoirHextech = Color(0xFF010A13);
 }
 
 class AppText {
@@ -26,6 +28,10 @@ class ImageAssets {
   static const String Soulignement = 'assets/images/decorator-hr-lg.png';
   static const String Title = 'assets/images/title.png';
   static const String ImageLegende1 = 'assets/images/legendes/default.jpeg';
+  static const String ImageBackground =
+      'assets/images/backgrounds/background.jpg';
+  static const String ImageBackgroundHeader =
+      'assets/images/backgrounds/header.jpg';
 }
 
 class Mp4Assets {
@@ -105,7 +111,7 @@ class _CountdownWidgetState extends State<CountdownWidget>
               shadows: [
                 Shadow(
                   blurRadius: 10.0,
-                  color: AppColors.colorBackground,
+                  color: AppColors.colorNoirHextech,
                   offset: Offset(5.0, 5.0),
                 ),
               ],

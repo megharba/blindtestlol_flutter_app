@@ -14,7 +14,6 @@ import 'services/gameServices.dart'; // Ensure this path is correct
 
 void main() => runApp(MyApp());
 
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -24,12 +23,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.amber,
-        scaffoldBackgroundColor: AppColors.colorBackground,
+        scaffoldBackgroundColor: AppColors.colorNoirHextech,
       ),
       home: LoadingPage(),
     );
   }
 }
-
-
-
