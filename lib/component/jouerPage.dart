@@ -5,16 +5,16 @@ import 'package:blindtestlol_flutter_app/models/models.dart';
 import 'package:blindtestlol_flutter_app/services/gameServices.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
 
-class AccueilPage extends StatefulWidget {
+class JouerPage extends StatefulWidget {
   final User user;
 
-  AccueilPage({required this.user});
+  JouerPage({required this.user});
 
   @override
-  _AccueilPageState createState() => _AccueilPageState();
+  _JouerPageState createState() => _JouerPageState();
 }
 
-class _AccueilPageState extends State<AccueilPage> {
+class _JouerPageState extends State<JouerPage> {
   final _formKey = GlobalKey<FormState>();
   int roundToPlay = 5; // Default value
   final GameService gameService = GameService('http://localhost:8080');

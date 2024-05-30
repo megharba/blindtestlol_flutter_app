@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.amber,
+        fontFamily: 'CustomFont1',
         scaffoldBackgroundColor: AppColors.colorNoirHextech,
       ),
       home: LoadingPage(),

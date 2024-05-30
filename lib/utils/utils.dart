@@ -43,6 +43,8 @@ class ImageAssets {
   static const String Jeu2 = 'assets/images/backgrounds/Jeu2.png';
   static const String Jeu3 = 'assets/images/backgrounds/Jeu3.png';
   static const String Jeu4 = 'assets/images/backgrounds/Jeu4.png';
+  static const String ImageEssencebleue =
+      'assets/images/backgrounds/essencebleue.png';
 }
 
 class Mp4Assets {
