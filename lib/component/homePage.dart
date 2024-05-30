@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
 import 'package:blindtestlol_flutter_app/component/accueilPage.dart';
 import 'package:blindtestlol_flutter_app/component/classementPage.dart';
+import 'package:blindtestlol_flutter_app/component/modesDeJeuPage.dart';
 import 'package:blindtestlol_flutter_app/models/models.dart';
 import 'package:blindtestlol_flutter_app/component/profil.dart';
 
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _widgetOptions = <Widget>[
       AccueilPage(user: widget.user),
+      ModesDeJeuPage(),
       ClassementPage(),
     ];
   }
@@ -49,26 +51,50 @@ class _HomePageState extends State<HomePage> {
           Positioned.fill(
             child: Image.asset(
               ImageAssets.ImageBackground,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
             ),
           ),
           // Main content
           Column(
             children: [
-              // Header avec le logo et l'image de profil (imagelegende1)
+              // Header with logo and profile image (imagelegende1)
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Logo
-                    Image.asset(
-                      ImageAssets.logo,
-                      width: 119,
-                      height: 150,
+                    // Text column (username and points)
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // User's name
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              widget.user.name,
+                              style: TextStyle(
+                                fontSize: 26,
+                                fontFamily: 'CustomFont1',
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          // Points count
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0, top: 4.0),
+                            child: Text(
+                              'Nombre de points: 0',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'CustomFont2',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    SizedBox(width: 8),
-                    // Image de profil (imagelegende1)
+                    // Profile image (imagelegende1)
                     GestureDetector(
                       onTap: _goToProfile,
                       child: Container(
@@ -88,22 +114,11 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
+                    SizedBox(width: 8), // Adding space on the right
                   ],
                 ),
               ),
-              // Nom de l'utilisateur
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Text(
-                  widget.user.name,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'CustomFont1',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              // Contenu principal de la page
+              // Main page content
               Expanded(
                 child: _widgetOptions.elementAt(_selectedIndex),
               ),
@@ -112,14 +127,26 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.leaderboard), label: 'Classement'),
+            icon: ImageIcon(AssetImage(ImageAssets.ImageAccueil), size: 50),
+            label: 'ACCUEIL',
+          ),
+          BottomNavigationBarItem(
+            icon: ImageIcon(AssetImage(ImageAssets.ImageModesdejeu), size: 50),
+            label: 'MODES DE JEU',
+          ),
+          BottomNavigationBarItem(
+            icon: ImageIcon(AssetImage(ImageAssets.ImageClassement), size: 50),
+            label: 'CLASSEMENT',
+          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: AppColors.colorTextTitle,
         onTap: _onItemTapped,
+        selectedLabelStyle: TextStyle(fontFamily: 'CustomFont1', fontSize: 16),
+        unselectedLabelStyle:
+            TextStyle(fontFamily: 'CustomFont1', fontSize: 16),
       ),
     );
   }

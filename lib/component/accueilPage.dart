@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:blindtestlol_flutter_app/component/answerPage.dart';
 import 'package:blindtestlol_flutter_app/models/models.dart';
 import 'package:blindtestlol_flutter_app/services/gameServices.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
-import 'package:flutter/material.dart';
 
 class AccueilPage extends StatefulWidget {
   final User user;
@@ -75,13 +75,13 @@ class _AccueilPageState extends State<AccueilPage> {
             key: _formKey,
             child: DropdownButtonFormField<int>(
               decoration: InputDecoration(
-                labelText: 'Number of Rounds',
+                labelText: 'Nombre de manches',
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.colorText),
+                  borderSide: BorderSide(color: Colors.black),
                   borderRadius: BorderRadius.all(Radius.circular(0)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.colorText),
+                  borderSide: BorderSide(color: Colors.black),
                   borderRadius: BorderRadius.all(Radius.circular(0)),
                 ),
               ),
@@ -100,7 +100,7 @@ class _AccueilPageState extends State<AccueilPage> {
               validator: (value) {
                 return value != null && value > 0
                     ? null
-                    : 'Please select a valid number of rounds';
+                    : 'Veuillez sélectionner un nombre de manches valide';
               },
             ),
           ),
@@ -124,11 +124,11 @@ class _AccueilPageState extends State<AccueilPage> {
                   if (initialMusicId != null) {
                     _showCountdownAndPlayMusic(initialMusicId);
                   } else {
-                    print('No initialMusicId received.');
+                    print('Aucun ID de musique initial reçu.');
                   }
                 }
               },
-              child: Text(AppText.LabelLancer),
+              child: Text('Lancer la partie'),
             ),
           ],
         );
@@ -138,27 +138,14 @@ class _AccueilPageState extends State<AccueilPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ElevatedButton(
-                onPressed: _startNewGame,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  side: BorderSide(color: Colors.white),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                ),
-                child: const Text(AppText.LabelLancer),
-              ),
-            ],
-          ),
+    return Center(
+      child: InkWell(
+        onTap: _startNewGame,
+        child: Image.asset(
+          ImageAssets.ImageButtonPlay,
+          width: 300,
+          height: 300,
+          fit: BoxFit.contain,
         ),
       ),
     );

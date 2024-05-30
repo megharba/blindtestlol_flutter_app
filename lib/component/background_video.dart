@@ -42,7 +42,14 @@ class _BackgroundVideoState extends State<BackgroundVideo> {
               child: SizedBox(
                 width: _controller.value.size.width,
                 height: _controller.value.size.height,
-                child: VideoPlayer(_controller),
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                    Colors.white.withOpacity(
+                        0.1), // Modifier l'opacité pour ajuster la luminosité
+                    BlendMode.srcOver,
+                  ),
+                  child: VideoPlayer(_controller),
+                ),
               ),
             ),
           )

@@ -32,6 +32,17 @@ class ImageAssets {
       'assets/images/backgrounds/background.jpg';
   static const String ImageBackgroundHeader =
       'assets/images/backgrounds/header.jpg';
+  static const String ImageButtonPlay =
+      'assets/images/backgrounds/buttonplay.png';
+  static const String ImageAccueil = 'assets/images/backgrounds/accueil.png';
+  static const String ImageClassement =
+      'assets/images/backgrounds/classement.png';
+  static const String ImageModesdejeu =
+      'assets/images/backgrounds/modesdejeu.png';
+  static const String Jeu1 = 'assets/images/backgrounds/jeu1.png';
+  static const String Jeu2 = 'assets/images/backgrounds/Jeu2.png';
+  static const String Jeu3 = 'assets/images/backgrounds/Jeu3.png';
+  static const String Jeu4 = 'assets/images/backgrounds/Jeu4.png';
 }
 
 class Mp4Assets {

@@ -151,6 +151,10 @@ class _LoginPageState extends State<LoginPage> {
           color: AppColors.colorTextTitle,
           fontFamily: 'CustomFont1',
         ),
+        filled:
+            true, // Ajout de cette ligne pour activer le remplissage du champ
+        fillColor: AppColors
+            .colorNoirHextech, // Couleur de fond pour le champ d'entrée
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.colorTextTitle),
           borderRadius: BorderRadius.all(Radius.circular(0)),

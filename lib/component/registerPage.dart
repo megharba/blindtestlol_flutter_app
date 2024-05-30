@@ -157,6 +157,10 @@ class _RegisterPageState extends State<RegisterPage> {
           color: color ?? AppColors.colorTextTitle,
           fontFamily: 'CustomFont1',
         ), // Utilisation de la couleur
+        filled:
+            true, // Ajout de cette ligne pour activer le remplissage du champ
+        fillColor: AppColors
+            .colorNoirHextech, // Couleur de fond pour le champ d'entrée
         border: OutlineInputBorder(),
       ),
     );
