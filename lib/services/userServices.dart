@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 import '../models/models.dart';
 
 class UserService {
@@ -8,11 +7,12 @@ class UserService {
 
   UserService();
 
-  Future<User> createUser(String name, String password) async {
+  Future<User> createUser(String name, String email, String password) async {
     final response = await http.post(
-      Uri.parse('${baseUrl}user/create?name=$name&password=$password'),
+      Uri.parse(
+          '${baseUrl}user/create?name=$name&email=$email&password=$password'),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'accept': 'application/hal+json',
       },
     );
 
@@ -27,6 +27,7 @@ class UserService {
     final url =
         Uri.parse('${baseUrl}user/connect?name=$name&password=$password');
     final response = await http.post(url);
+
     if (response.statusCode == 200) {
       return User.fromJson(json.decode(response.body));
     } else {

@@ -170,8 +170,8 @@ class _RegisterPageState extends State<RegisterPage> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
     try {
-      final user = await UserService()
-          .createUser(_nameController.text, _passwordController.text);
+      final user = await UserService().createUser(_nameController.text,
+          _emailController.text, _passwordController.text);
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => HomePage(user: user)),
       );

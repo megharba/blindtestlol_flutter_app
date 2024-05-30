@@ -19,7 +19,8 @@ class PlayerResponse {
       musicId: json['musicId'] ?? 'Unknown', // Provide default if null
       proposition: json['proposition'] ?? 'Unknown',
       type: json['type'] ?? 'Unknown',
-      date: DateTime.tryParse(json['date']) ?? DateTime.now(), // Handle null and parsing errors
+      date: DateTime.tryParse(json['date']) ??
+          DateTime.now(), // Handle null and parsing errors
     );
   }
 
@@ -56,7 +57,9 @@ class GameResponse {
       player: Player.fromJson(json['player'] as Map<String, dynamic>),
       roundToPlay: json['roundToPlay'] as int,
       round: json['round'] as int,
-      musicPlayed: (json['musicPlayed'] as List).map((x) => Music.fromJson(x as Map<String, dynamic>)).toList(),
+      musicPlayed: (json['musicPlayed'] as List)
+          .map((x) => Music.fromJson(x as Map<String, dynamic>))
+          .toList(),
       over: json['over'] as bool,
     );
   }
