@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
 import 'package:blindtestlol_flutter_app/component/homePage.dart'; // Importez la page d'accueil
@@ -7,7 +6,7 @@ import 'package:blindtestlol_flutter_app/models/models.dart';
 class ModesDeJeuPage extends StatefulWidget {
   final User user;
 
-  ModesDeJeuPage({required this.user});
+  const ModesDeJeuPage({super.key, required this.user});
 
   @override
   _ModesDeJeuPageState createState() => _ModesDeJeuPageState();
@@ -19,17 +18,17 @@ class _ModesDeJeuPageState extends State<ModesDeJeuPage>
   late Animation<double> _animation;
 
   // Les chemins des images des modes de jeu
-  static const String Jeu1 = ImageAssets.Jeu1;
-  static const String Jeu2 = ImageAssets.Jeu2;
-  static const String Jeu3 = ImageAssets.Jeu3;
-  static const String Jeu4 = ImageAssets.Jeu4;
+  static const String jeu1 = ImageAssets.jeu1;
+  static const String jeu2 = ImageAssets.jeu2;
+  static const String jeu3 = ImageAssets.jeu3;
+  static const String jeu4 = ImageAssets.jeu4;
 
   // Les descriptions des modes de jeu
   final List<Map<String, String>> modes = [
-    {'image': Jeu1, 'description': 'Faille de l\'invocateur'},
-    {'image': Jeu2, 'description': 'Aram'},
-    {'image': Jeu3, 'description': 'Teamfight Tactics'},
-    {'image': Jeu4, 'description': 'Arena'},
+    {'image': jeu1, 'description': 'Faille de l\'invocateur'},
+    {'image': jeu2, 'description': 'Aram'},
+    {'image': jeu3, 'description': 'Teamfight Tactics'},
+    {'image': jeu4, 'description': 'Arena'},
   ];
 
   @override
@@ -55,7 +54,9 @@ class _ModesDeJeuPageState extends State<ModesDeJeuPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Modes de Jeu'),
+        title: Text(
+          'Modes de Jeu',
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -68,7 +69,7 @@ class _ModesDeJeuPageState extends State<ModesDeJeuPage>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               ...modes.asMap().entries.map((entry) {
                 final index = entry.key;
                 final mode = entry.value;
@@ -96,7 +97,7 @@ class _ModesDeJeuPageState extends State<ModesDeJeuPage>
                                     BoxShadow(
                                       color: Colors.black.withOpacity(0.3),
                                       blurRadius: 5,
-                                      offset: Offset(0, 3),
+                                      offset: const Offset(0, 3),
                                     ),
                                   ],
                                 ),
@@ -108,11 +109,12 @@ class _ModesDeJeuPageState extends State<ModesDeJeuPage>
                                 ),
                               ),
                             ),
-                            SizedBox(width: 16),
+                            const SizedBox(width: 16),
                             Expanded(
                               child: Text(
                                 mode['description']!,
-                                style: TextStyle(fontSize: 16),
+                                style: const TextStyle(
+                                    fontSize: 16, fontFamily: 'CustomFont1'),
                               ),
                             ),
                           ],

@@ -1,8 +1,14 @@
+// ignore_for_file: empty_catches
+
+import 'dart:convert';
 import 'package:blindtestlol_flutter_app/component/gameOverScreen.dart';
 import 'package:blindtestlol_flutter_app/models/models.dart';
 import 'package:blindtestlol_flutter_app/services/gameServices.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
+
+import 'package:flutter/services.dart';
 
 class AnswerPhasePage extends StatefulWidget {
   final String gameId;
@@ -27,17 +33,22 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
   final _formKey = GlobalKey<FormState>();
   final GameService gameService = GameService('http://localhost:8080');
   final TextEditingController _propositionController = TextEditingController();
-  final TextEditingController _typeController = TextEditingController();
+  final TextEditingController _typeController =
+      TextEditingController(text: "TYPE DE LA MUSIQUE");
   final TextEditingController _dateController = TextEditingController();
 
   String? nextMusicId;
   late AnimationController _animationController;
   late Animation<double> _animation;
   int currentRound = 1; // Initialisé à 1 comme prévu
+  late String _randomImagePath =
+      'assets/images/gif/sticker_1.gif'; // initialize _randomImagePath here
 
   @override
   void initState() {
     super.initState();
+    _initRandomImagePath();
+
     currentRound = widget.currentRound;
     _animationController = AnimationController(
       vsync: this,
@@ -50,9 +61,31 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        _showCountdownAndPlayMusic(widget.initialMusicId);
+        AudioManager.instance.playMusic(widget.initialMusicId);
       }
     });
+  }
+
+  Future<void> _initRandomImagePath() async {
+    final List<String> gifPaths = await _loadGifPaths();
+    if (gifPaths.isNotEmpty) {
+      final randomImagePath = gifPaths[Random().nextInt(gifPaths.length)];
+      setState(() {
+        _randomImagePath = randomImagePath;
+      });
+    } else {
+      setState(() {
+        _randomImagePath = 'assets/images/gif/sticker_1.gif';
+      });
+    }
+  }
+
+  Future<List<String>> _loadGifPaths() async {
+    final manifestContent = await rootBundle.loadString('AssetManifest.json');
+    final Map<String, dynamic> manifestMap = json.decode(manifestContent);
+    return manifestMap.keys
+        .where((String key) => key.contains('assets/images/gif/'))
+        .toList();
   }
 
   @override
@@ -117,9 +150,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
         nextMusicId = await gameService.playRound(widget.gameId);
         if (nextMusicId != null) {
           _showCountdownAndPlayMusic(nextMusicId!);
-        } else {
-          print("Received null for the next music ID");
-        }
+        } else {}
       } else {
         // Handle game end scenario by navigating to GameOverScreen
         Navigator.of(context).pushReplacement(
@@ -132,9 +163,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
           ),
         );
       }
-    } catch (e) {
-      print('Failed to submit response: $e');
-    }
+    } catch (e) {}
   }
 
   void _onCountdownComplete() {
@@ -146,11 +175,30 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text(
-          'Answer Phase',
+          'Faille de l '
+          ''
+          'invocateur',
           style: TextStyle(color: AppColors.colorText), // Couleur du texte
         ),
         backgroundColor: AppColors.colorNoirHextech,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            AudioManager.instance.stopMusic(); // Mettre la musique en pause
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CountdownTimer(
+              duration: 25,
+              onComplete: _onCountdownComplete,
+            ),
+          ),
+        ],
       ),
       body: Container(
         width: double.infinity,
@@ -162,7 +210,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
             AnimatedBuilder(
               animation: _animation,
               builder: (context, child) {
-                return Container(
+                return SizedBox(
                   height: 10,
                   child: LinearProgressIndicator(
                     value: _animation.value,
@@ -175,8 +223,8 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
             ),
             const SizedBox(height: 10),
             Text(
-              'Round $currentRound of ${widget.totalRounds}',
-              style: TextStyle(
+              'Manche $currentRound sur ${widget.totalRounds}',
+              style: const TextStyle(
                 color: AppColors.colorText,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -184,14 +232,32 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: CountdownTimer(
-                  duration: 30, // Durée totale du round en secondes
-                  onComplete: _onCountdownComplete,
-                ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Image circulaire
+                  Container(
+                    margin: const EdgeInsets.only(
+                        top: 50), // Décalage de 50 par rapport au haut
+                    width: 300, // Taille de l'image circulaire
+                    height: 300,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors
+                          .transparent, // Couleur de fond de l'image circulaire
+                    ),
+                    child: Image.asset(
+                      _randomImagePath,
+                      width: 250, // Taille de l'image circulaire
+                      height: 250,
+                      fit: BoxFit
+                          .cover, // Ajuster la taille de l'image pour couvrir la zone donnée
+                    ),
+                  ),
+                ],
               ),
             ),
+
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -202,60 +268,106 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                     children: [
                       TextFormField(
                         controller: _propositionController,
-                        style: TextStyle(color: AppColors.colorText),
+                        style: const TextStyle(color: AppColors.colorTextTitle),
                         decoration: InputDecoration(
                           labelText: 'Proposition',
-                          labelStyle: TextStyle(color: AppColors.colorText),
+                          labelStyle:
+                              TextStyle(color: AppColors.colorTextTitle),
+                          hintText:
+                              'NOM DE LA MUSIQUE', // Placeholder pour la proposition
+                          hintStyle: TextStyle(
+                              color: AppColors.colorTextTitle.withOpacity(0.5)),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: AppColors.colorText),
+                            borderSide:
+                                BorderSide(color: AppColors.colorTextTitle),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: AppColors.colorText),
+                            borderSide:
+                                BorderSide(color: AppColors.colorTextTitle),
                           ),
                         ),
-                        validator: (value) =>
-                            value!.isEmpty ? 'Enter a proposition' : null,
+                        validator: (value) => value!.isEmpty ? '' : null,
                       ),
                       const SizedBox(height: 20),
-                      TextFormField(
-                        controller: _typeController,
-                        style: TextStyle(color: AppColors.colorText),
-                        decoration: InputDecoration(
-                          labelText: 'Type',
-                          labelStyle: TextStyle(color: AppColors.colorText),
+                      DropdownButtonFormField<String>(
+                        value: _typeController.text.isNotEmpty
+                            ? _typeController.text
+                            : null,
+                        items: [
+                          "TYPE DE LA MUSIQUE", "SKIN", "EVENT",
+                          "CHAMPION",
+                          // Ajoutez des options factices ici si nécessaire
+                        ].map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _typeController.text = newValue!;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Type de la musique',
+                          labelStyle:
+                              TextStyle(color: AppColors.colorTextTitle),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: AppColors.colorText),
+                            borderSide:
+                                BorderSide(color: AppColors.colorTextTitle),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: AppColors.colorText),
+                            borderSide:
+                                BorderSide(color: AppColors.colorTextTitle),
                           ),
                         ),
-                        validator: (value) =>
-                            value!.isEmpty ? 'Enter a type' : null,
+                        validator: (value) => value == null ? '' : null,
                       ),
                       const SizedBox(height: 20),
-                      TextFormField(
-                        controller: _dateController,
-                        style: TextStyle(color: AppColors.colorText),
-                        decoration: InputDecoration(
+                      DropdownButtonFormField<int>(
+                        value: _dateController.text.isNotEmpty
+                            ? int.tryParse(_dateController.text)
+                            : null,
+                        items: [
+                          DropdownMenuItem<int>(
+                            value: null,
+                            child: Text("DATE DE LA MUSIQUE"),
+                          ),
+                          ...List.generate(14, (index) => 2010 + index)
+                              .map((int value) {
+                            return DropdownMenuItem<int>(
+                              value: value,
+                              child: Text(value.toString()),
+                            );
+                          }).toList(),
+                        ],
+                        onChanged: (int? newValue) {
+                          setState(() {
+                            _dateController.text =
+                                newValue.toString(); // Conversion en string
+                          });
+                        },
+                        decoration: const InputDecoration(
                           labelText: 'Date',
-                          labelStyle: TextStyle(color: AppColors.colorText),
+                          labelStyle:
+                              TextStyle(color: AppColors.colorTextTitle),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: AppColors.colorText),
+                            borderSide:
+                                BorderSide(color: AppColors.colorTextTitle),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: AppColors.colorText),
+                            borderSide:
+                                BorderSide(color: AppColors.colorTextTitle),
                           ),
                         ),
-                        validator: (value) =>
-                            value!.isEmpty ? 'Enter a date' : null,
+                        validator: (value) => value == null ? '' : null,
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: _submitResponse,
                         style: ElevatedButton.styleFrom(
                           foregroundColor: AppColors.colorNoirHextech,
-                          backgroundColor: AppColors.colorText,
+                          backgroundColor: AppColors.colorTextTitle,
                           padding: EdgeInsets.symmetric(
                               horizontal: 50, vertical: 15),
                         ),

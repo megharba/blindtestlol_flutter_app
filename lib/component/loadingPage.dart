@@ -1,9 +1,12 @@
 import 'package:blindtestlol_flutter_app/component/loginPage.dart';
+import 'package:blindtestlol_flutter_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async';
 
 class LoadingPage extends StatefulWidget {
+  const LoadingPage({super.key});
+
   @override
   _LoadingPageState createState() => _LoadingPageState();
 }
@@ -15,17 +18,16 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     super.initState();
-    _controller =
-        VideoPlayerController.asset('assets/images/Poro_base_AN_idle3.mp4')
-          ..initialize().then((_) {
-            if (!_isDisposed) {
-              setState(() {
-                _controller.setVolume(0.0);
-                _controller.play();
-                _controller.setLooping(true);
-              });
-            }
+    _controller = VideoPlayerController.asset(Mp4Assets.videoPlayerController)
+      ..initialize().then((_) {
+        if (!_isDisposed) {
+          setState(() {
+            _controller.setVolume(0.0);
+            _controller.play();
+            _controller.setLooping(true);
           });
+        }
+      });
 
     Timer(const Duration(seconds: 3), () {
       if (mounted) {
@@ -53,8 +55,8 @@ class _LoadingPageState extends State<LoadingPage> {
                   child: FittedBox(
                     fit: BoxFit.cover,
                     child: SizedBox(
-                      width: _controller.value.size?.width ?? 0,
-                      height: _controller.value.size?.height ?? 0,
+                      width: _controller.value.size.width,
+                      height: _controller.value.size.height,
                       child: VideoPlayer(_controller),
                     ),
                   ),
@@ -68,11 +70,9 @@ class _LoadingPageState extends State<LoadingPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/esgi2.png',
-                        width: 80, height: 80),
+                    Image.asset(ImageAssets.esgiLogo, width: 80, height: 80),
                     const SizedBox(width: 10),
-                    Image.asset('assets/images/logo.png',
-                        width: 80, height: 80),
+                    Image.asset(ImageAssets.logo, width: 80, height: 80),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -91,8 +91,7 @@ class _LoadingPageState extends State<LoadingPage> {
                     fontSize: 20,
                   ),
                 ),
-                Image.asset('assets/images/decorator-hr-lg.png',
-                    fit: BoxFit.fitWidth),
+                Image.asset(ImageAssets.soulignement, fit: BoxFit.fitWidth),
               ],
             ),
           ),

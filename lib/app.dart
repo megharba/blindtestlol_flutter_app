@@ -1,24 +1,19 @@
-import 'dart:convert';
-import 'dart:async';
-import 'package:blindtestlol_flutter_app/component/answerPage.dart';
 import 'package:blindtestlol_flutter_app/component/loadingPage.dart';
-import 'package:blindtestlol_flutter_app/component/loginPage.dart';
-import 'package:blindtestlol_flutter_app/services/userServices.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:video_player/video_player.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'models/models.dart'; // Ensure this path is correct
-import 'services/gameServices.dart'; // Ensure this path is correct
 
-void main() => runApp(MyApp());
+// Ensure this path is correct
+// Ensure this path is correct
+
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: AppText.Title,
+      title: AppText.title,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,

@@ -12,43 +12,55 @@ class AppColors {
 }
 
 class AppText {
-  static const String Title = 'THEME OF LEGENDS';
+  static const String title = 'THEME OF LEGENDS';
   static const String labelIdentifiant = 'IDENTIFIANT';
   static const String labelInscription = 'INSCRIPTION';
   static const String labelConnexion = 'CONNEXION';
   static const String labelPassword = 'MOT DE PASSE';
   static const String labelEmail = 'EMAIL';
-  static const String LabelLancer = 'LANCER';
+  static const String labelLancer = 'LANCER';
+  static const String labelMotDePasse = 'Mot de passe oublié';
 }
 
 class ImageAssets {
-  static const String logo = 'assets/images/logo.png';
-  static const String sonaGif = 'assets/images/sona.gif';
-  static const String esgiLogo = 'assets/images/esgi2.png';
-  static const String Soulignement = 'assets/images/decorator-hr-lg.png';
-  static const String Title = 'assets/images/title.png';
-  static const String ImageLegende1 = 'assets/images/legendes/default.jpeg';
-  static const String ImageBackground =
+  static const String logo = 'assets/images/backgrounds/logo.png';
+  static const String caitlynGif = 'assets/images/gif/caitlyn.gif';
+  static const String esgiLogo = 'assets/images/esgi/esgi2.png';
+  static const String soulignement =
+      'assets/images/backgrounds/decorator-hr-lg.png';
+  static const String title = 'assets/images/logo/title.png';
+  static const String imageLegende1 = 'assets/images/legendes/default.jpeg';
+  static const String imageBackground =
       'assets/images/backgrounds/background.jpg';
-  static const String ImageBackgroundHeader =
+  static const String imageBackgroundHeader =
       'assets/images/backgrounds/header.jpg';
-  static const String ImageButtonPlay =
+  static const String imageButtonPlay =
       'assets/images/backgrounds/buttonplay.png';
-  static const String ImageAccueil = 'assets/images/backgrounds/accueil.png';
-  static const String ImageClassement =
+  static const String imageAccueil = 'assets/images/backgrounds/accueil.png';
+  static const String imageClassement =
       'assets/images/backgrounds/classement.png';
-  static const String ImageModesdejeu =
+  static const String imageModesDejeu =
       'assets/images/backgrounds/modesdejeu.png';
-  static const String Jeu1 = 'assets/images/backgrounds/jeu1.png';
-  static const String Jeu2 = 'assets/images/backgrounds/Jeu2.png';
-  static const String Jeu3 = 'assets/images/backgrounds/Jeu3.png';
-  static const String Jeu4 = 'assets/images/backgrounds/Jeu4.png';
-  static const String ImageEssencebleue =
+  static const String jeu1 = 'assets/images/backgrounds/jeu1.png';
+  static const String jeu2 = 'assets/images/backgrounds/Jeu2.png';
+  static const String jeu3 = 'assets/images/backgrounds/Jeu3.png';
+  static const String jeu4 = 'assets/images/backgrounds/Jeu4.png';
+  static const String imageEssenceBleue =
       'assets/images/backgrounds/essencebleue.png';
+  static const String imageKda = 'assets/images/backgrounds/kda.png';
+  static const String imageProfil = 'assets/images/backgrounds/profil.png';
+  static const String imageCountdown =
+      'assets/images/backgrounds/imageCountdown.png';
+  static const String imageroundCircle = 'assets/images/logo/circle.gif';
+  static const String abeilleMecontente =
+      'assets/images/backgrounds/abeilleMecontente.png';
+  static const String abeilleContente =
+      'assets/images/backgrounds/abeilleContente.png';
 }
 
 class Mp4Assets {
-  static const VideoPlayerController = 'assets/images/Poro_base_AN_idle3.mp4';
+  static const videoPlayerController =
+      'assets/musicBackground/Poro_base_AN_idle3.mp4';
 }
 
 class CountdownWidget extends StatefulWidget {
@@ -147,6 +159,7 @@ class CountdownTimer extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _CountdownTimerState createState() => _CountdownTimerState();
 }
 
@@ -162,7 +175,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (remainingTime == 0) {
         timer.cancel();
         widget.onComplete();

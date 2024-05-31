@@ -1,3 +1,4 @@
+import 'package:blindtestlol_flutter_app/component/forgotPasswordPage.dart';
 import 'package:blindtestlol_flutter_app/component/homePage.dart';
 import 'package:blindtestlol_flutter_app/component/registerPage.dart';
 import 'package:blindtestlol_flutter_app/services/userServices.dart';
@@ -6,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:blindtestlol_flutter_app/component/background_video.dart'; // Assurez-vous de remplacer le chemin par celui de votre fichier
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -22,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          BackgroundVideo(),
+          const BackgroundVideo(),
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
@@ -35,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 20),
                   Image.asset(
-                    ImageAssets.Title, // Chemin de ton image unique
+                    ImageAssets.title, // Chemin de ton image unique
                     width: 300, // Ajuste la largeur selon tes besoins
                     height: 75, // Ajuste la hauteur selon tes besoins
                   ),
@@ -73,13 +76,12 @@ class _LoginPageState extends State<LoginPage> {
                                 horizontal: 40, vertical: 15),
                           ),
                           child: _isLoading
-                              ? CircularProgressIndicator()
+                              ? const CircularProgressIndicator()
                               : Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Image.asset(
-                                      ImageAssets
-                                          .logo, // Assurez-vous que ce chemin est correct
+                                      ImageAssets.logo,
                                       height: 50,
                                     ),
                                     const SizedBox(width: 3),
@@ -94,6 +96,24 @@ class _LoginPageState extends State<LoginPage> {
                                   ],
                                 ),
                         ),
+                        const SizedBox(
+                            height:
+                                10), // Ajoutez cette ligne pour l'espacement
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => ForgotPasswordPage()),
+                            );
+                          },
+                          child: const Text(
+                            AppText.labelMotDePasse,
+                            style: TextStyle(
+                              color: AppColors.colorTextTitle,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -104,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 50.0),
                         child: Image.asset(
-                          ImageAssets.Soulignement,
+                          ImageAssets.soulignement,
                         ),
                       ),
                       TextButton(
@@ -114,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (context) => RegisterPage()),
                           );
                         },
-                        child: Text(
+                        child: const Text(
                           AppText.labelInscription,
                           style: TextStyle(
                             color: AppColors.colorText,
@@ -141,13 +161,13 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
-      style: TextStyle(
+      style: const TextStyle(
         color: AppColors.colorText,
         fontFamily: 'CustomFont1',
       ),
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           color: AppColors.colorTextTitle,
           fontFamily: 'CustomFont1',
         ),
@@ -155,11 +175,11 @@ class _LoginPageState extends State<LoginPage> {
             true, // Ajout de cette ligne pour activer le remplissage du champ
         fillColor: AppColors
             .colorNoirHextech, // Couleur de fond pour le champ d'entrée
-        enabledBorder: OutlineInputBorder(
+        enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.colorTextTitle),
           borderRadius: BorderRadius.all(Radius.circular(0)),
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.colorTextTitle),
           borderRadius: BorderRadius.all(Radius.circular(0)),
         ),
