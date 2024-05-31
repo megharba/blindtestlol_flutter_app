@@ -148,25 +148,6 @@ class Player {
   }
 }
 
-class HighScore {
-  final int roundNumber;
-  final int highScoreValue;
-  final String mastery;
-
-  HighScore({
-    required this.roundNumber,
-    required this.highScoreValue,
-    required this.mastery,
-  });
-
-  factory HighScore.fromJson(Map<String, dynamic> json) {
-    return HighScore(
-      roundNumber: json['roundNumber'],
-      highScoreValue: json['highScoreValue'],
-      mastery: json['mastery'],
-    );
-  }
-}
 
 class User {
   final int id;
@@ -198,5 +179,68 @@ class User {
       highScore: highScoreItems,
       totalScore: json['totalScore'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'uid': uid,
+      'gamePlayed': gamePlayed,
+      'highScore': highScore.map((i) => i.toJson()).toList(),
+      'totalScore': totalScore,
+    };
+  }
+}
+
+class HighScore {
+  final int roundNumber;
+  final int highScoreValue;
+  final String mastery;
+
+  HighScore({
+    required this.roundNumber,
+    required this.highScoreValue,
+    required this.mastery,
+  });
+
+  factory HighScore.fromJson(Map<String, dynamic> json) {
+    return HighScore(
+      roundNumber: json['roundNumber'],
+      highScoreValue: json['highScoreValue'],
+      mastery: json['mastery'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'roundNumber': roundNumber,
+      'highScoreValue': highScoreValue,
+      'mastery': mastery,
+    };
+  }
+}
+
+class UserHighScore {
+  final String userName;
+  final HighScore highScore;
+
+  UserHighScore({
+    required this.userName,
+    required this.highScore,
+  });
+
+  factory UserHighScore.fromJson(Map<String, dynamic> json) {
+    return UserHighScore(
+      userName: json['userName'],
+      highScore: HighScore.fromJson(json['highScore']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userName': userName,
+      'highScore': highScore.toJson(),
+    };
   }
 }

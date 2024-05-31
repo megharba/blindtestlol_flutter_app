@@ -26,7 +26,7 @@ class UserService {
   Future<User> connectUser(String name, String password) async {
     final url =
         Uri.parse('${baseUrl}user/connect?name=$name&password=$password');
-    final response = await http.post(url);
+    final response = await http.get(url);
 
     if (response.statusCode == 200) {
       return User.fromJson(json.decode(response.body));

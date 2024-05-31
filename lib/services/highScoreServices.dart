@@ -3,21 +3,13 @@ import 'package:blindtestlol_flutter_app/models/models.dart';
 import 'package:http/http.dart' as http;
 
 class HighScoreService {
-  static const String baseUrl = 'https://your-api-endpoint.com';
-
-  Future<List<HighScore>> getHighScores(int round) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/high-score/list?round=$round'),
-      headers: {
-        'Accept': 'application/hal+json',
-      },
-    );
+  Future<List<UserHighScore>> getHighScores(int round) async {
+    final response = await http.get(Uri.parse('http://localhost:8080/high-score/list?round=$round'));
 
     if (response.statusCode == 200) {
-      List<dynamic> body = json.decode(response.body);
-      List<HighScore> highScores =
-          body.map((dynamic item) => HighScore.fromJson(item)).toList();
-      return highScores;
+      List<dynamic> body = jsonDecode(response.body);
+      print('API response: $body');
+      return body.map((dynamic item) => UserHighScore.fromJson(item)).toList();
     } else {
       throw Exception('Failed to load high scores');
     }
