@@ -46,7 +46,9 @@ class ImageAssets {
   static const String jeu3 = 'assets/images/backgrounds/Jeu3.png';
   static const String jeu4 = 'assets/images/backgrounds/Jeu4.png';
   static const String imageEssenceBleue =
-      'assets/images/backgrounds/essencebleue.png';
+      'assets/images/backgrounds/essencebleu.png';
+  static const String imageEssenceOrange =
+      'assets/images/backgrounds/essenceOrange.png';
   static const String imageKda = 'assets/images/backgrounds/kda.png';
   static const String imageProfil = 'assets/images/backgrounds/profil.png';
   static const String imageCountdown =
@@ -56,11 +58,26 @@ class ImageAssets {
       'assets/images/backgrounds/abeilleMecontente.png';
   static const String abeilleContente =
       'assets/images/backgrounds/abeilleContente.png';
+  static const String imageShop = 'assets/images/backgrounds/shop.png';
+  static const String imageCoinGif = 'assets/images/logo/coin.gif';
+  static const String imageMasteryDefault = 'assets/images/logo/mastery.png';
+  static const String imageBackground1 =
+      'assets/images/backgrounds/seraphine.png';
+  static const String imageBackground2 = 'assets/images/backgrounds/ekko.png';
+  static const String imageBackground3 =
+      'assets/images/backgrounds/morgana.jpg';
+  static const String imageBackground4 = 'assets/images/backgrounds/kogmaw.jpg';
+  static const String imageProfilPage =
+      'assets/images/backgrounds/ProfilPage.png';
 }
 
 class Mp4Assets {
   static const videoPlayerController =
       'assets/musicBackground/Poro_base_AN_idle3.mp4';
+}
+
+class WavAssets {
+  static const soundRemix = 'assets/musicBackground/remix.mp3';
 }
 
 class CountdownWidget extends StatefulWidget {

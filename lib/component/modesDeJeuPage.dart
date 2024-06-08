@@ -1,12 +1,27 @@
+import 'package:blindtestlol_flutter_app/component/answerPage.dart';
+import 'package:blindtestlol_flutter_app/services/gameServices.dart';
 import 'package:flutter/material.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
-import 'package:blindtestlol_flutter_app/component/homePage.dart'; // Importez la page d'accueil
+import 'package:blindtestlol_flutter_app/component/homePage.dart';
 import 'package:blindtestlol_flutter_app/models/models.dart';
+
+import 'accueilPage.dart';
 
 class ModesDeJeuPage extends StatefulWidget {
   final User user;
+  String? currentGameId;
+  int currentRound;
+  int totalRounds;
+  GameService gameService;
 
-  const ModesDeJeuPage({super.key, required this.user});
+  ModesDeJeuPage({
+    Key? key,
+    required this.user,
+    this.currentGameId, // Provide default values or make them nullable
+    this.currentRound = 0,
+    this.totalRounds = 0,
+    required this.gameService,
+  }) : super(key: key);
 
   @override
   _ModesDeJeuPageState createState() => _ModesDeJeuPageState();
@@ -17,18 +32,42 @@ class _ModesDeJeuPageState extends State<ModesDeJeuPage>
   late AnimationController _controller;
   late Animation<double> _animation;
 
-  // Les chemins des images des modes de jeu
   static const String jeu1 = ImageAssets.jeu1;
   static const String jeu2 = ImageAssets.jeu2;
   static const String jeu3 = ImageAssets.jeu3;
   static const String jeu4 = ImageAssets.jeu4;
 
-  // Les descriptions des modes de jeu
+  static const String imageBackground1 = ImageAssets.imageBackground1;
+  static const String imageBackground2 = ImageAssets.imageBackground2;
+  static const String imageBackground3 = ImageAssets.imageBackground3;
+  static const String imageBackground4 = ImageAssets.imageBackground4;
+
   final List<Map<String, String>> modes = [
-    {'image': jeu1, 'description': 'Faille de l\'invocateur'},
-    {'image': jeu2, 'description': 'Aram'},
-    {'image': jeu3, 'description': 'Teamfight Tactics'},
-    {'image': jeu4, 'description': 'Arena'},
+    {
+      'image': jeu1,
+      'title': 'Faille de l\'invocateur',
+      'background': imageBackground1,
+      'description': 'Jouer en mode Faille de l\'invocateur classique.'
+    },
+    {
+      'image': jeu2,
+      'title': 'ARAM',
+      'background': imageBackground2,
+      'description': 'Mettez vos réflexes musicaux à l\'épreuve en mode ARAM.'
+    },
+    {
+      'image': jeu3,
+      'title': 'URF',
+      'background': imageBackground3,
+      'description': 'Vibrez au rythme des musiques endiablées en mode URF.'
+    },
+    {
+      'image': jeu4,
+      'title': 'À Venir',
+      'background': imageBackground4,
+      'description':
+          'Restez à l\'écoute pour découvrir de nouveaux modes de jeu !'
+    },
   ];
 
   @override
@@ -60,16 +99,11 @@ class _ModesDeJeuPageState extends State<ModesDeJeuPage>
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0),
-            color: AppColors.colorNoirHextech, // Couleur de fond spécifique
-          ),
-          padding: EdgeInsets.symmetric(vertical: 8.0),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               ...modes.asMap().entries.map((entry) {
                 final index = entry.key;
                 final mode = entry.value;
@@ -77,62 +111,148 @@ class _ModesDeJeuPageState extends State<ModesDeJeuPage>
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomePage(user: widget.user),
-                          ),
-                        );
+                        int roundToPlay;
+                        switch (index) {
+                          case 0:
+                            roundToPlay = 5;
+                            break;
+                          case 1:
+                            roundToPlay = 10;
+                            break;
+                          case 2:
+                            roundToPlay = 15;
+                            break;
+                          default:
+                            roundToPlay = 0;
+                            break;
+                        }
+
+                        if (roundToPlay > 0) {
+                          _startNewGame(roundToPlay);
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  AccueilPage(user: widget.user),
+                            ),
+                          );
+                        }
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30.0),
+                          color: AppColors.colorNoirHextech,
+                          image: DecorationImage(
+                            image: AssetImage(mode['background']!),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        height: 150,
+                        padding: EdgeInsets.symmetric(vertical: 8.0),
                         child: Row(
                           children: [
-                            // Animation de survol et ombre portée
                             Transform.scale(
                               scale: _animation.value,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.3),
-                                      blurRadius: 5,
-                                      offset: const Offset(0, 3),
-                                    ),
-                                  ],
-                                ),
-                                child: Image.asset(
-                                  mode['image']!,
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                ),
+                              child: Image.asset(
+                                mode['image']!,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
                               ),
                             ),
-                            const SizedBox(width: 16),
+                            SizedBox(width: 16),
                             Expanded(
-                              child: Text(
-                                mode['description']!,
-                                style: const TextStyle(
-                                    fontSize: 16, fontFamily: 'CustomFont1'),
+                              child: Center(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.6, // Largeur fixe
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.5),
+                                          blurRadius: 5,
+                                          spreadRadius: 2,
+                                          offset: Offset(0, 3),
+                                        ),
+                                      ],
+                                    ),
+                                    padding: EdgeInsets.all(8),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          mode['title']!,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontFamily: 'CustomFont1',
+                                            color: AppColors.colorText,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(height: 4),
+                                        Text(
+                                          mode['description']!,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.white70,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    if (index !=
-                        modes.length -
-                            1) // Ne pas ajouter de séparateur après le dernier élément
-                      Container(
-                        height: 1,
-                        color: AppColors.colorTextTitle,
-                      ),
+                    if (index != modes.length - 1) SizedBox(height: 20),
                   ],
                 );
               }).toList(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  void _startNewGame(int roundToPlay) async {
+    final GameResponse gameResponse = await widget.gameService.createGame(
+      widget.user.uid,
+      roundToPlay,
+    );
+    widget.currentGameId = gameResponse.gameId;
+    widget.currentRound = 1;
+    widget.totalRounds = roundToPlay;
+
+    final String? initialMusicId =
+        await widget.gameService.playRound(widget.currentGameId!);
+    if (initialMusicId != null) {
+      _showCountdownAndPlayMusic(initialMusicId);
+    } else {
+      print('No initialMusicId received.');
+    }
+  }
+
+  void _showCountdownAndPlayMusic(String musicId) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => AnswerPhasePage(
+          gameId: widget.currentGameId ?? '',
+          currentRound: widget.currentRound,
+          totalRounds: widget.totalRounds,
+          initialMusicId: musicId,
         ),
       ),
     );

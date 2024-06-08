@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AProposPage extends StatelessWidget {
-  const AProposPage({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Contenu de la page À Propos'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('À propos de League of Legends'),
+      ),
+      body: Center(
+        child: Text('Contenu de la page À propos de League of Legends'),
+      ),
     );
   }
 }

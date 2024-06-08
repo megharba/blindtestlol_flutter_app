@@ -41,8 +41,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
   late AnimationController _animationController;
   late Animation<double> _animation;
   int currentRound = 1; // Initialisé à 1 comme prévu
-  late String _randomImagePath =
-      'assets/images/gif/sticker_1.gif'; // initialize _randomImagePath here
+  late String _randomImagePath = 'assets/images/gif/sticker_1.gif';
 
   @override
   void initState() {
@@ -176,19 +175,17 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'Faille de l '
-          ''
-          'invocateur',
-          style: TextStyle(color: AppColors.colorText), // Couleur du texte
-        ),
         backgroundColor: AppColors.colorNoirHextech,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            AudioManager.instance.stopMusic(); // Mettre la musique en pause
+            AudioManager.instance.stopMusic();
             Navigator.of(context).pop();
           },
+        ),
+        title: Image.asset(
+          ImageAssets.title, // Chemin de votre image
+          width: 150, // Ajustez la largeur selon vos besoins
         ),
         actions: [
           Padding(

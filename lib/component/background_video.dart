@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class BackgroundVideo extends StatefulWidget {
-  const BackgroundVideo({super.key});
+  const BackgroundVideo({Key? key}) : super(key: key);
 
   @override
   _BackgroundVideoState createState() => _BackgroundVideoState();
@@ -10,23 +10,17 @@ class BackgroundVideo extends StatefulWidget {
 
 class _BackgroundVideoState extends State<BackgroundVideo> {
   late VideoPlayerController _controller;
-  bool _isInitialized = false;
+  late Future<void> _initializeVideoPlayerFuture;
 
   @override
   void initState() {
     super.initState();
     _controller =
-        VideoPlayerController.asset('assets/musicBackground/heartsteel.mp4')
-          ..initialize().then((_) {
-            if (mounted) {
-              setState(() {
-                _isInitialized = true;
-              });
-              _controller.setVolume(0.0);
-              _controller.setLooping(true);
-              _controller.play();
-            }
-          });
+        VideoPlayerController.asset('assets/musicBackground/heartsteel.mp4');
+    _initializeVideoPlayerFuture = _controller.initialize();
+    _controller.setVolume(1.0);
+    _controller.setLooping(true);
+    _controller.play();
   }
 
   @override
@@ -37,24 +31,26 @@ class _BackgroundVideoState extends State<BackgroundVideo> {
 
   @override
   Widget build(BuildContext context) {
-    return _isInitialized
-        ? SizedBox.expand(
+    return FutureBuilder(
+      future: _initializeVideoPlayerFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return SizedBox.expand(
             child: FittedBox(
               fit: BoxFit.cover,
               child: SizedBox(
                 width: _controller.value.size.width,
                 height: _controller.value.size.height,
-                child: ColorFiltered(
-                  colorFilter: ColorFilter.mode(
-                    Colors.white.withOpacity(
-                        0.1), // Modifier l'opacité pour ajuster la luminosité
-                    BlendMode.srcOver,
-                  ),
-                  child: VideoPlayer(_controller),
-                ),
+                child: VideoPlayer(_controller),
               ),
             ),
-          )
-        : const Center(child: CircularProgressIndicator());
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
   }
 }
