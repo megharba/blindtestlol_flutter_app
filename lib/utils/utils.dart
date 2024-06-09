@@ -54,6 +54,7 @@ class ImageAssets {
   static const String imageCountdown =
       'assets/images/backgrounds/imageCountdown.png';
   static const String imageroundCircle = 'assets/images/logo/circle.gif';
+  static const String Imageporogif = 'assets/images/logo/poro.gif';
   static const String abeilleMecontente =
       'assets/images/backgrounds/abeilleMecontente.png';
   static const String abeilleContente =
@@ -76,7 +77,7 @@ class Mp4Assets {
       'assets/musicBackground/Poro_base_AN_idle3.mp4';
 }
 
-class WavAssets {
+class Mp3Assets {
   static const soundRemix = 'assets/musicBackground/remix.mp3';
 }
 

@@ -193,13 +193,17 @@ class _HomePageState extends State<HomePage>
           ),
         ),
         child: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: ImageIcon(AssetImage(ImageAssets.imageAccueil), size: 30),
               label: 'ACCUEIL',
             ),
             BottomNavigationBarItem(
-              icon: ImageIcon(AssetImage(ImageAssets.imageProfil), size: 30),
+              icon: Image.asset(
+                ImageAssets.Imageporogif,
+                width: 70,
+                height: 70,
+              ),
               label: 'PROFIL',
             ),
             BottomNavigationBarItem(
