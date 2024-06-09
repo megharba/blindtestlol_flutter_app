@@ -16,7 +16,7 @@ dependencies:
   video_player: ^2.8.6
   cupertino_icons: ^1.0.6
   audioplayers: ^6.0.0
-  wave: ^0.2.2
+  circular_countdown_timer: ^0.2.3
 
 
 dev_dependencies:
@@ -31,7 +31,10 @@ flutter:
     - assets/images/
     - assets/images/legendes/
     - assets/images/backgrounds/
-    - assets/musicBackground/heartsteel.mp4
+    - assets/images/esgi/
+    - assets/images/logo/
+    - assets/images/gif/
+    - assets/musicBackground/
   fonts:
     - family: CustomFont1
       fonts:

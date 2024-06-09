@@ -3,6 +3,8 @@ import 'package:blindtestlol_flutter_app/models/models.dart';
 import 'package:blindtestlol_flutter_app/services/highScoreServices.dart';
 
 class ClassementPage extends StatefulWidget {
+  const ClassementPage({super.key});
+
   @override
   _ClassementPageState createState() => _ClassementPageState();
 }

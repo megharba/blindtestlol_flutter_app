@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class BackgroundVideo extends StatefulWidget {
+  const BackgroundVideo({super.key});
+
   @override
   _BackgroundVideoState createState() => _BackgroundVideoState();
 }
@@ -53,6 +55,6 @@ class _BackgroundVideoState extends State<BackgroundVideo> {
               ),
             ),
           )
-        : Center(child: CircularProgressIndicator());
+        : const Center(child: CircularProgressIndicator());
   }
 }

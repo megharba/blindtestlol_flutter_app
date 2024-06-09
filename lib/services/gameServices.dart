@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/models.dart'; // Ensure this import path is correct
@@ -20,7 +22,7 @@ class GameService {
   }
 
 // Method to post player responses
-Future<String?> playRound(String gameId) async {
+  Future<String?> playRound(String gameId) async {
     final url = Uri.parse('$baseUrl/game/play-round?gameId=$gameId');
     try {
       final response = await http.get(url);
@@ -28,7 +30,9 @@ Future<String?> playRound(String gameId) async {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
         if (responseBody.containsKey('token')) {
-          print('playRound response: $responseBody');  // Logging the response
+          // ignore: duplicate_ignore
+          // ignore: avoid_print
+          print('playRound response: $responseBody'); // Logging the response
           return responseBody['token'] as String?;
         } else {
           print('Token not found in the response body');
@@ -70,10 +74,14 @@ Future<String?> playRound(String gameId) async {
 
     if (response.statusCode == 200) {
       final responseJson = jsonDecode(response.body);
-      print('postPlayerResponse response: $responseJson');  // Logging the response
+      print(
+          'postPlayerResponse response: $responseJson'); // Logging the response
       return GameResponse.fromJson(responseJson);
     } else {
-      print('Failed to submit player response: ${response.statusCode} - ${response.body}');
-      throw Exception('Failed to submit player response: ${response.statusCode} - ${response.body}');
+      print(
+          'Failed to submit player response: ${response.statusCode} - ${response.body}');
+      throw Exception(
+          'Failed to submit player response: ${response.statusCode} - ${response.body}');
     }
-  }}
+  }
+}

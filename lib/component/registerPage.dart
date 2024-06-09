@@ -6,6 +6,8 @@ import 'package:blindtestlol_flutter_app/component/loginPage.dart';
 import 'package:blindtestlol_flutter_app/services/userServices.dart';
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -22,7 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       body: Stack(
         children: [
-          BackgroundVideo(), // Utilisez le widget BackgroundVideo comme fond
+          const BackgroundVideo(), // Utilisez le widget BackgroundVideo comme fond
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
@@ -35,7 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 20),
                   Image.asset(
-                    ImageAssets.Title, // Chemin de ton image unique
+                    ImageAssets.title, // Chemin de ton image unique
                     width: 300, // Ajuste la largeur selon tes besoins
                     height: 75, // Ajuste la hauteur selon tes besoins
                   ),
@@ -70,8 +72,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         ElevatedButton(
                           onPressed: _isLoading ? null : _register,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF0E1013),
-                            side: BorderSide(color: AppColors.colorTextTitle),
+                            backgroundColor: AppColors.colorNoirHextech,
+                            side: const BorderSide(
+                                color: AppColors.colorTextTitle),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
@@ -79,7 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 horizontal: 40, vertical: 15),
                           ),
                           child: _isLoading
-                              ? CircularProgressIndicator()
+                              ? const CircularProgressIndicator()
                               : Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -108,7 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 50.0),
                         child: Image.asset(
-                          ImageAssets.Soulignement,
+                          ImageAssets.soulignement,
                         ),
                       ),
                       TextButton(
@@ -161,7 +164,7 @@ class _RegisterPageState extends State<RegisterPage> {
             true, // Ajout de cette ligne pour activer le remplissage du champ
         fillColor: AppColors
             .colorNoirHextech, // Couleur de fond pour le champ d'entrée
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
       ),
     );
   }
