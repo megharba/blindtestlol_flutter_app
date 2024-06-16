@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'CustomFont1',
         scaffoldBackgroundColor: AppColors.colorNoirHextech,
       ),
-      home: LoadingPage(),
+      home: const LoadingPage(),
     );
   }
 }

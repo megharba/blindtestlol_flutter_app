@@ -1,10 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:blindtestlol_flutter_app/component/background_video.dart';
 import 'package:blindtestlol_flutter_app/component/forgotPasswordPage.dart';
 import 'package:blindtestlol_flutter_app/component/homePage.dart';
 import 'package:blindtestlol_flutter_app/component/registerPage.dart';
 import 'package:blindtestlol_flutter_app/services/userServices.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
-import 'package:flutter/material.dart';
-import 'package:blindtestlol_flutter_app/component/background_video.dart'; // Assurez-vous de remplacer le chemin par celui de votre fichier
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          const BackgroundVideo(),
+          const BackgroundVideo(videoPath: Mp4Assets.videoPlayerController2),
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
@@ -33,14 +33,14 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Image.asset(
-                    ImageAssets.logo, // Assurez-vous que ce chemin est correct
+                    ImageAssets.logo,
                     height: 100,
                   ),
                   const SizedBox(height: 20),
                   Image.asset(
-                    ImageAssets.title, // Chemin de ton image unique
-                    width: 300, // Ajuste la largeur selon tes besoins
-                    height: 75, // Ajuste la hauteur selon tes besoins
+                    ImageAssets.title,
+                    width: 300,
+                    height: 75,
                   ),
                   const SizedBox(height: 20),
                   const Divider(
@@ -96,9 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ],
                                 ),
                         ),
-                        const SizedBox(
-                            height:
-                                10), // Ajoutez cette ligne pour l'espacement
+                        const SizedBox(height: 10),
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).push(
@@ -109,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: const Text(
                             AppText.labelMotDePasse,
                             style: TextStyle(
-                              color: AppColors.colorTextTitle,
+                              color: AppColors.colorText,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -154,10 +152,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildTextField(
-      {required TextEditingController controller,
-      required String labelText,
-      required bool obscureText}) {
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String labelText,
+    required bool obscureText,
+  }) {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
@@ -171,10 +170,8 @@ class _LoginPageState extends State<LoginPage> {
           color: AppColors.colorTextTitle,
           fontFamily: 'CustomFont1',
         ),
-        filled:
-            true, // Ajout de cette ligne pour activer le remplissage du champ
-        fillColor: AppColors
-            .colorNoirHextech, // Couleur de fond pour le champ d'entrée
+        filled: true,
+        fillColor: AppColors.colorNoirHextech,
         enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.colorTextTitle),
           borderRadius: BorderRadius.all(Radius.circular(0)),
@@ -199,7 +196,6 @@ class _LoginPageState extends State<LoginPage> {
         MaterialPageRoute(builder: (_) => HomePage(user: user)),
       );
     } catch (e) {
-      // Handle errors, possibly show an alert dialog
       setState(() => _isLoading = false);
     }
   }

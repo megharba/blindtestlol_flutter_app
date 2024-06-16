@@ -70,11 +70,32 @@ class ImageAssets {
   static const String imageBackground4 = 'assets/images/backgrounds/kogmaw.jpg';
   static const String imageProfilPage =
       'assets/images/backgrounds/ProfilPage.png';
+  static const String imageBackgroundSeraphine =
+      'assets/images/logo/seraphine.png';
+  static const String imageCurseur = 'assets/images/logo/curseur.png';
 }
 
 class Mp4Assets {
   static const videoPlayerController =
       'assets/musicBackground/Poro_base_AN_idle3.mp4';
+  static const videoPlayerController2 = 'assets/musicBackground/heartsteel.mp4';
+  static const String imageBackgroundProfil = 'assets/musicBackground/nunu.mp4';
+  static const String imageBackgroundProfil2 =
+      'assets/musicBackground/yuumi.mp4';
+  static const String imageBackgroundProfil3 =
+      'assets/musicBackground/season.mp4';
+}
+
+class AproposAssets {
+  static const apropos4 = 'assets/images/logo/arcane.gif';
+  static const apropos2 = 'assets/images/logo/runeterra.png';
+  static const apropos1 = 'assets/images/logo/lol.png';
+  static const apropos3 = 'assets/images/logo/tft.png';
+  static const apropos5 = 'assets/images/logo/team.gif';
+}
+
+class ProblemAssets {
+  static const problem = 'assets/images/logo/problem.png';
 }
 
 class Mp3Assets {

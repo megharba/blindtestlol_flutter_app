@@ -2,11 +2,10 @@ import 'package:blindtestlol_flutter_app/component/answerPage.dart';
 import 'package:blindtestlol_flutter_app/services/gameServices.dart';
 import 'package:flutter/material.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
-import 'package:blindtestlol_flutter_app/component/homePage.dart';
 import 'package:blindtestlol_flutter_app/models/models.dart';
-
 import 'accueilPage.dart';
 
+// ignore: must_be_immutable
 class ModesDeJeuPage extends StatefulWidget {
   final User user;
   String? currentGameId;

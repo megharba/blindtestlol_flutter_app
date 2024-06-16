@@ -24,7 +24,14 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       body: Stack(
         children: [
-          const BackgroundVideo(), // Utilisez le widget BackgroundVideo comme fond
+          // Background image
+          Positioned.fill(
+            child: Image.asset(
+              ImageAssets
+                  .imageBackgroundSeraphine, // Chemin de votre image de fond
+              fit: BoxFit.cover, // Ajustement pour couvrir toute la surface
+            ),
+          ),
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
