@@ -1,12 +1,13 @@
-import 'package:blindtestlol_flutter_app/component/modesDeJeuPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:blindtestlol_flutter_app/component/answerPage.dart';
 import 'package:blindtestlol_flutter_app/models/models.dart';
 import 'package:blindtestlol_flutter_app/services/gameServices.dart';
-import 'package:blindtestlol_flutter_app/utils/utils.dart';
 import 'package:flutter/widgets.dart';
+
+import '../utils/utils.dart';
+import 'modesDeJeuPage.dart';
 
 class AccueilPage extends StatefulWidget {
   final User user;
@@ -55,34 +56,6 @@ class _AccueilPageState extends State<AccueilPage> {
     );
   }
 
-  void _showShopDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Redirection vers la boutique"),
-          content: Text("Êtes-vous sûr de vouloir accéder à la boutique ?"),
-          actions: <Widget>[
-            TextButton(
-              child: Text("ANNULER"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text("OK"),
-              onPressed: () {
-                // Redirection vers la boutique
-                Navigator.of(context).pop();
-                // Ajoutez la logique de redirection ici
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,33 +66,6 @@ class _AccueilPageState extends State<AccueilPage> {
             child: Image.asset(
               ImageAssets.imageBackground,
               fit: BoxFit.cover,
-            ),
-          ),
-          // Bouton "Boutique" en haut à gauche
-          Positioned(
-            top: MediaQuery.of(context).padding.top + 16.0,
-            left: 16.0,
-            child: GestureDetector(
-              onTap: _showShopDialog,
-              child: Row(
-                children: [
-                  Image.asset(
-                    ImageAssets.imageShop, // Icône de boutique
-                    color: AppColors.colorTextTitle,
-                    width: 50,
-                    height: 50,
-                  ),
-                  SizedBox(width: 8.0),
-                  Text(
-                    'BOUTIQUE',
-                    style: TextStyle(
-                      color: Colors.white, // Couleur du texte
-                      fontWeight: FontWeight.bold,
-                      fontSize: 26,
-                    ),
-                  ),
-                ],
-              ),
             ),
           ),
           // Bouton "Jouer" au milieu de l'écran

@@ -1,45 +1,105 @@
 import 'package:flutter/material.dart';
-import 'package:blindtestlol_flutter_app/utils/utils.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:convert';
 
-class BoutiquePage extends StatelessWidget {
+import '../utils/utils.dart'; // Assurez-vous d'importer vos utilitaires personnalisés ici
+
+class BoutiquePage extends StatefulWidget {
+  @override
+  _BoutiquePageState createState() => _BoutiquePageState();
+}
+
+class _BoutiquePageState extends State<BoutiquePage> {
+  List<String> imagePaths = [];
+  List<String> imageNames = []; // Liste pour stocker les noms des images
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImages();
+  }
+
+  Future<void> _loadImages() async {
+    List<String> paths = await loadImagesFromAssets('assets/images/legendes/');
+    setState(() {
+      imagePaths = paths;
+      imageNames = paths
+          .map((path) => _getFileName(path))
+          .toList(); // Récupérer les noms des fichiers
+    });
+  }
+
+  String _getFileName(String path) {
+    // Extraire le nom du fichier sans l'extension à partir du chemin complet
+    String fileNameWithExtension = path.split('/').last;
+    return fileNameWithExtension
+        .split('.')
+        .first; // Retourner le nom du fichier sans l'extension
+  }
+
+  Future<List<String>> loadImagesFromAssets(String path) async {
+    final manifestContent = await rootBundle.loadString('AssetManifest.json');
+    final Map<String, dynamic> manifestMap = json.decode(manifestContent);
+    return manifestMap.keys.where((String key) => key.contains(path)).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Boutique'),
-        backgroundColor: AppColors.colorTextTitle,
+        backgroundColor:
+            AppColors.colorTextTitle, // Remplacez par votre couleur préférée
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Nombre de colonnes
-            crossAxisSpacing: 16.0, // Espacement entre les colonnes
-            mainAxisSpacing: 16.0, // Espacement entre les lignes
-            childAspectRatio: 1.0, // Ratio pour des cases carrées
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.black, Colors.grey[900]!],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          itemCount: 60, // Nombre total de cases
-          itemBuilder: (context, index) {
-            return _buildGridItem(context, index);
-          },
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16.0,
+              mainAxisSpacing: 16.0,
+              childAspectRatio: 0.8,
+            ),
+            itemCount: imagePaths.length,
+            itemBuilder: (context, index) {
+              return _buildGridItem(context, index,
+                  imageNames[index]); // Passer le nom de l'image à afficher
+            },
+          ),
         ),
       ),
-      backgroundColor: AppColors.colorNoirHextech,
     );
   }
 
-  Widget _buildGridItem(BuildContext context, int index) {
+  Widget _buildGridItem(BuildContext context, int index, String imageName) {
+    String imagePath = imagePaths[index];
     return GestureDetector(
       onTap: () {
         // Action lors du clic sur une case
       },
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.colorTextTitle.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(10.0),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 8.0,
+              offset: Offset(0, 4),
+            ),
+          ],
           border: Border.all(
-            color: AppColors.colorTextTitle,
-            width: 2.0,
+            color: AppColors
+                .colorTextTitle, // Remplacez par votre couleur préférée
+            width: 1.0,
           ),
         ),
         child: Column(
@@ -47,10 +107,9 @@ class BoutiquePage extends StatelessWidget {
           children: [
             Expanded(
               child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
                 child: Image.asset(
-                  ImageAssets
-                      .imageLegende1, // Remplacez par le chemin de votre image
+                  imagePath,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -58,17 +117,19 @@ class BoutiquePage extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(8.0),
               decoration: BoxDecoration(
-                color: AppColors.colorTextTitle.withOpacity(0.8),
+                color: AppColors
+                    .colorTextTitle, // Remplacez par votre couleur préférée
                 borderRadius:
-                    BorderRadius.vertical(bottom: Radius.circular(10.0)),
+                    BorderRadius.vertical(bottom: Radius.circular(20.0)),
               ),
               child: Text(
-                'Item ${index + 1}', // Légende pour chaque case
+                imageName, // Afficher le nom de l'image ici
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
-                  fontFamily: 'CustomFont2',
+                  fontFamily:
+                      'CustomFont2', // Remplacez par votre police préférée
                 ),
               ),
             ),
