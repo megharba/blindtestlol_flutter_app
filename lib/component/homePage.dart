@@ -3,7 +3,6 @@ import 'package:blindtestlol_flutter_app/component/profilPage.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
 import 'package:blindtestlol_flutter_app/component/accueilPage.dart';
 import 'package:blindtestlol_flutter_app/component/classementPage.dart';
-import 'package:blindtestlol_flutter_app/component/modesDeJeuPage.dart';
 import 'package:blindtestlol_flutter_app/models/models.dart';
 
 class HomePage extends StatefulWidget {

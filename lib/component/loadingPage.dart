@@ -1,11 +1,12 @@
-import 'package:blindtestlol_flutter_app/component/loginPage.dart';
-import 'package:blindtestlol_flutter_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async';
+import 'package:blindtestlol_flutter_app/utils/utils.dart';
+
+import 'loginPage.dart';
 
 class LoadingPage extends StatefulWidget {
-  const LoadingPage({super.key});
+  const LoadingPage({Key? key}) : super(key: key);
 
   @override
   _LoadingPageState createState() => _LoadingPageState();
@@ -14,28 +15,41 @@ class LoadingPage extends StatefulWidget {
 class _LoadingPageState extends State<LoadingPage> {
   late VideoPlayerController _controller;
   bool _isDisposed = false;
+  bool _navigateToLogin = false; // Variable pour suivre l'état de la navigation
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(Mp4Assets.videoPlayerController)
-      ..initialize().then((_) {
-        if (!_isDisposed) {
-          setState(() {
-            _controller.setVolume(0.0);
-            _controller.play();
-            _controller.setLooping(true);
-          });
+    _initializeVideoController();
+  }
+
+  void _initializeVideoController() async {
+    _controller = VideoPlayerController.asset(Mp4Assets.videoPlayerController);
+
+    try {
+      await _controller.initialize();
+      if (!_isDisposed) {
+        setState(() {
+          _controller.setVolume(0.0);
+          _controller.play();
+          _controller.setLooping(true);
+        });
+      }
+
+      Timer(const Duration(seconds: 3), () {
+        if (mounted && !_navigateToLogin) {
+          // Vérifier avant de naviguer
+          _controller.pause();
+          _controller.dispose(); // Libérer les ressources
+          _navigateToLogin = true; // Mettre à jour l'état de la navigation
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const LoginPage()),
+          );
         }
       });
-
-    Timer(const Duration(seconds: 3), () {
-      if (mounted) {
-        _controller.pause();
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
-      }
-    });
+    } catch (e) {
+      print('Erreur lors de l\'initialisation du contrôleur vidéo: $e');
+    }
   }
 
   @override

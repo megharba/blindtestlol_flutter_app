@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class BackgroundVideo extends StatefulWidget {
-  const BackgroundVideo({Key? key}) : super(key: key);
+  final String videoPath;
+
+  const BackgroundVideo({Key? key, required this.videoPath}) : super(key: key);
 
   @override
   _BackgroundVideoState createState() => _BackgroundVideoState();
@@ -15,8 +17,11 @@ class _BackgroundVideoState extends State<BackgroundVideo> {
   @override
   void initState() {
     super.initState();
-    _controller =
-        VideoPlayerController.asset('assets/musicBackground/heartsteel.mp4');
+    _initializeVideoPlayer();
+  }
+
+  void _initializeVideoPlayer() {
+    _controller = VideoPlayerController.asset(widget.videoPath);
     _initializeVideoPlayerFuture = _controller.initialize();
     _controller.setVolume(1.0);
     _controller.setLooping(true);
@@ -46,7 +51,7 @@ class _BackgroundVideoState extends State<BackgroundVideo> {
             ),
           );
         } else {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }

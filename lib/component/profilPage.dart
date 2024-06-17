@@ -4,12 +4,14 @@ import 'package:blindtestlol_flutter_app/component/aProposPage.dart';
 import 'package:blindtestlol_flutter_app/component/boutiquePage.dart';
 import 'package:blindtestlol_flutter_app/models/models.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
-import 'package:blindtestlol_flutter_app/component/loginPage.dart'; // Importez la page de connexion
+import 'package:blindtestlol_flutter_app/component/loginPage.dart';
+
+import 'comptePage.dart'; // Importez la page de connexion
 
 class ProfilPage extends StatelessWidget {
   final User user;
 
-  const ProfilPage({required this.user});
+  const ProfilPage({super.key, required this.user});
 
   void _deconnexion(BuildContext context) {
     // Implémentez ici la logique de déconnexion
@@ -50,14 +52,14 @@ class ProfilPage extends StatelessWidget {
               _customButton(
                 text: 'Compte',
                 onPressed: () {
-                  // Navigation vers la page de compte
-                },
-              ),
-              SizedBox(height: 8.0),
-              _customButton(
-                text: 'Avatar',
-                onPressed: () {
-                  // Navigation vers la page d'avatar
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ComptePage(
+                        user: user,
+                      ),
+                    ),
+                  );
                 },
               ),
               SizedBox(height: 16.0),

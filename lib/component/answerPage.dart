@@ -46,7 +46,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
   @override
   void initState() {
     super.initState();
-    _initRandomImagePath();
+    _initRandomImagePath(); // Ajoutez cet appel
 
     currentRound = widget.currentRound;
     _animationController = AnimationController(
@@ -54,7 +54,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
       duration: Duration(milliseconds: 500),
     );
     _animation = Tween<double>(
-      begin: currentRound / widget.totalRounds, // Initialisé à 1
+      begin: currentRound / widget.totalRounds,
       end: currentRound / widget.totalRounds,
     ).animate(_animationController);
 
@@ -143,6 +143,9 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
           end: currentRound / widget.totalRounds,
         ).animate(_animationController);
         _animationController.forward(from: 0.0);
+
+        // Réinitialiser le chemin de l'image aléatoire
+        _initRandomImagePath(); // Ajoutez cet appel
       });
 
       if (!apiResponse.over) {
@@ -267,7 +270,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                         controller: _propositionController,
                         style: const TextStyle(color: AppColors.colorTextTitle),
                         decoration: InputDecoration(
-                          labelText: 'Proposition',
+                          labelText: 'Quel est le nom de cette musique',
                           labelStyle:
                               TextStyle(color: AppColors.colorTextTitle),
                           hintText:
@@ -306,7 +309,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                           });
                         },
                         decoration: const InputDecoration(
-                          labelText: 'Type de la musique',
+                          labelText: 'Quel est le Type de cette musique ?',
                           labelStyle:
                               TextStyle(color: AppColors.colorTextTitle),
                           enabledBorder: OutlineInputBorder(
@@ -345,7 +348,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                           });
                         },
                         decoration: const InputDecoration(
-                          labelText: 'Date',
+                          labelText: 'Quand est sortie cette musique ?',
                           labelStyle:
                               TextStyle(color: AppColors.colorTextTitle),
                           enabledBorder: OutlineInputBorder(
