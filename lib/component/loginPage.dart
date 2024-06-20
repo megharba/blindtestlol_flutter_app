@@ -25,7 +25,8 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          const BackgroundVideo(videoPath: Mp4Assets.videoPlayerController2),
+          const BackgroundVideo(
+              videoPath: Mp4Assets.videoPlayerController2, fit: BoxFit.cover),
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),

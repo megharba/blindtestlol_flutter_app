@@ -3,8 +3,13 @@ import 'package:video_player/video_player.dart';
 
 class BackgroundVideo extends StatefulWidget {
   final String videoPath;
+  final BoxFit fit;
 
-  const BackgroundVideo({Key? key, required this.videoPath}) : super(key: key);
+  const BackgroundVideo({
+    Key? key,
+    required this.videoPath,
+    this.fit = BoxFit.cover, // Default to BoxFit.cover
+  }) : super(key: key);
 
   @override
   _BackgroundVideoState createState() => _BackgroundVideoState();
@@ -49,7 +54,7 @@ class _BackgroundVideoState extends State<BackgroundVideo> {
         if (snapshot.connectionState == ConnectionState.done) {
           return SizedBox.expand(
             child: FittedBox(
-              fit: BoxFit.cover,
+              fit: widget.fit, // Use the fit parameter passed to the widget
               child: SizedBox(
                 width: _controller.value.size.width,
                 height: _controller.value.size.height,
