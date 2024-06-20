@@ -23,9 +23,8 @@ class _AccueilPageState extends State<AccueilPage> {
     final filePath = 'song/$musicId.mp3';
     _audioPlayer.play(AssetSource(filePath));
   }
-
-  void _showCountdownAndPlayMusic(String musicId) {
-    // Navigate to AnswerPhasePage directly without showing the dialog
+//là il faut a jouté le donnée de la première musique lancé 
+  void _showCountdownAndPlayMusic(String musicId, String name, String type, String date) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AnswerPhasePage(
@@ -33,6 +32,9 @@ class _AccueilPageState extends State<AccueilPage> {
           currentRound: 1, // Assuming always starting from round 1
           totalRounds: 0, // No rounds
           initialMusicId: musicId,
+          initialMusicName:name,
+          initialMusicType:type,
+          initialMusicDate:date
         ),
       ),
     );
@@ -43,9 +45,9 @@ class _AccueilPageState extends State<AccueilPage> {
         await gameService.createGame(widget.user.uid, 0); // No rounds
     currentGameId = gameResponse.gameId;
 
-    final String? initialMusicId = await gameService.playRound(currentGameId!);
-    if (initialMusicId != null) {
-      _showCountdownAndPlayMusic(initialMusicId);
+    final PlayRoundResponse? playRoundResponse = await gameService.playRound(currentGameId!);
+    if (playRoundResponse != null) {
+      _showCountdownAndPlayMusic(playRoundResponse.token, playRoundResponse.name,playRoundResponse.type,playRoundResponse.date);
     } else {
       print('Aucun ID de musique initial reçu.');
     }
@@ -123,7 +125,6 @@ class _AccueilPageState extends State<AccueilPage> {
               ),
             ],
           ),
-          // Image KDA
         ],
       ),
     );

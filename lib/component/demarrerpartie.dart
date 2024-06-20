@@ -24,15 +24,17 @@ class _AccueilPageState extends State<AccueilPage> {
     _audioPlayer.play(AssetSource(filePath));
   }
 
-  void _showCountdownAndPlayMusic(String musicId) {
-    // Navigate to AnswerPhasePage directly without showing the dialog
+  void _showCountdownAndPlayMusic(String musicId, String musicName, String musicType, String musicDate) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AnswerPhasePage(
           gameId: currentGameId ?? '',
-          currentRound: 1, // Assuming always starting from round 1
-          totalRounds: 0, // No rounds
+          currentRound: 1,
+          totalRounds: 0,
           initialMusicId: musicId,
+          initialMusicName: musicName,
+          initialMusicType: musicType,
+          initialMusicDate: musicDate,
         ),
       ),
     );
@@ -43,9 +45,13 @@ class _AccueilPageState extends State<AccueilPage> {
         await gameService.createGame(widget.user.uid, 0); // No rounds
     currentGameId = gameResponse.gameId;
 
-    final String? initialMusicId = await gameService.playRound(currentGameId!);
-    if (initialMusicId != null) {
-      _showCountdownAndPlayMusic(initialMusicId);
+    final PlayRoundResponse? initialRoundResponse = await gameService.playRound(currentGameId!);
+    if (initialRoundResponse != null) {
+      final initialMusicId = initialRoundResponse.token;
+      final initialMusicName = initialRoundResponse.name;
+      final initialMusicType = initialRoundResponse.type;
+      final initialMusicDate = initialRoundResponse.date;
+      _showCountdownAndPlayMusic(initialMusicId, initialMusicName, initialMusicType, initialMusicDate);
     } else {
       print('Aucun ID de musique initial reçu.');
     }
@@ -56,19 +62,17 @@ class _AccueilPageState extends State<AccueilPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background image
           Positioned.fill(
             child: Image.asset(
               ImageAssets.imageBackground,
               fit: BoxFit.cover,
             ),
           ),
-          // GIF en haut à droite
           Align(
             alignment: Alignment.topRight,
             child: Padding(
               padding: const EdgeInsets.only(top: 50.0, right: 8.0),
-              /*child: SizedBox(
+              child: SizedBox(
                 height: 150,
                 width: 150,
                 child: Image.asset(
@@ -76,14 +80,11 @@ class _AccueilPageState extends State<AccueilPage> {
                   fit: BoxFit.cover,
                 ),
               ),
-              */
             ),
           ),
-          // Main content
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Header with logo and profile image
               Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
@@ -99,7 +100,6 @@ class _AccueilPageState extends State<AccueilPage> {
                   ),
                 ),
               ),
-              // Main page content
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 200.0, top: 8.0),
@@ -114,7 +114,7 @@ class _AccueilPageState extends State<AccueilPage> {
                             fixedSize: MaterialStateProperty.all(Size(620, 40)),
                             backgroundColor: MaterialStateProperty.all<Color>(
                               Colors.black,
-                            ), // Fond noir
+                            ),
                             foregroundColor: MaterialStateProperty.all<Color>(
                               AppColors.colorTextTitle,
                             ),
@@ -122,10 +122,8 @@ class _AccueilPageState extends State<AccueilPage> {
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
                                 side: BorderSide(
-                                  color: AppColors
-                                      .colorTextTitle, // Couleur de la bordure extérieure
-                                  width:
-                                      1, // Épaisseur de la bordure extérieure
+                                  color: AppColors.colorTextTitle,
+                                  width: 1,
                                 ),
                               ),
                             ),
@@ -134,7 +132,7 @@ class _AccueilPageState extends State<AccueilPage> {
                             'Démarrer la partie',
                             style: TextStyle(
                               fontSize: 22,
-                            ), // Taille du texte modifiée
+                            ),
                           ),
                         ),
                       ],
@@ -144,7 +142,6 @@ class _AccueilPageState extends State<AccueilPage> {
               ),
             ],
           ),
-          // Image KDA
           Align(
             alignment: Alignment.bottomCenter,
             child: SizedBox(

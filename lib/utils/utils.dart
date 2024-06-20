@@ -102,6 +102,8 @@ class Mp3Assets {
   static const soundRemix = 'assets/musicBackground/remix.mp3';
 }
 
+
+
 class CountdownWidget extends StatefulWidget {
   final int seconds;
   final VoidCallback onComplete;
@@ -112,23 +114,14 @@ class CountdownWidget extends StatefulWidget {
   _CountdownWidgetState createState() => _CountdownWidgetState();
 }
 
-class _CountdownWidgetState extends State<CountdownWidget>
-    with SingleTickerProviderStateMixin {
+class _CountdownWidgetState extends State<CountdownWidget> {
   late Timer _timer;
-  late AnimationController _controller;
-  late Animation<double> _animation;
   late int currentSecond;
 
   @override
   void initState() {
     super.initState();
     currentSecond = widget.seconds;
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
-
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       if (currentSecond == 0) {
         timer.cancel();
@@ -137,7 +130,6 @@ class _CountdownWidgetState extends State<CountdownWidget>
         setState(() {
           currentSecond--;
         });
-        _controller.forward(from: 0.0);
       }
     });
   }
@@ -145,43 +137,87 @@ class _CountdownWidgetState extends State<CountdownWidget>
   @override
   void dispose() {
     _timer.cancel();
-    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Positioned.fill(
-            child: AnimatedBuilder(
-              animation: _animation,
-              builder: (_, __) => Container(
-                decoration: BoxDecoration(
-                  color: AppColors.colorText.withOpacity(1 - _animation.value),
-                  shape: BoxShape.circle,
-                ),
-              ),
+      child: Text(
+        '$currentSecond',
+        style: const TextStyle(
+          fontSize: 35, // Reduced font size
+          fontWeight: FontWeight.bold,
+          color: AppColors.colorText,
+          shadows: [
+            Shadow(
+              blurRadius: 10.0,
+              color: AppColors.colorNoirHextech,
+              offset: Offset(5.0, 5.0),
             ),
-          ),
-          Text(
-            '$currentSecond',
-            style: const TextStyle(
-              fontSize: 60,
-              fontWeight: FontWeight.bold,
-              color: AppColors.colorText,
-              shadows: [
-                Shadow(
-                  blurRadius: 10.0,
-                  color: AppColors.colorNoirHextech,
-                  offset: Offset(5.0, 5.0),
-                ),
-              ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ScoreComboCountdownWidget extends StatefulWidget {
+  final int seconds;
+  final VoidCallback onComplete;
+
+  const ScoreComboCountdownWidget({
+    required this.seconds,
+    required this.onComplete,
+  });
+
+  @override
+  _ScoreComboCountdownWidgetState createState() => _ScoreComboCountdownWidgetState();
+}
+
+class _ScoreComboCountdownWidgetState extends State<ScoreComboCountdownWidget> {
+  late Timer _timer;
+  late int currentSecond;
+
+  @override
+  void initState() {
+    super.initState();
+    currentSecond = widget.seconds;
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      if (currentSecond == 0) {
+        timer.cancel();
+        widget.onComplete();
+      } else {
+        setState(() {
+          currentSecond--;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        '$currentSecond',
+        style: const TextStyle(
+          fontSize: 35, // Reduced font size
+          fontWeight: FontWeight.bold,
+          color: AppColors.colorText,
+          shadows: [
+            Shadow(
+              blurRadius: 10.0,
+              color: AppColors.colorNoirHextech,
+              offset: Offset(5.0, 5.0),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -237,7 +273,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
     return Text(
       '$remainingTime',
       style: TextStyle(
-        fontSize: 24,
+        fontSize: 30,
         fontWeight: FontWeight.bold,
         color: remainingTime <= 5 ? Colors.red : AppColors.colorText,
       ),
@@ -275,5 +311,24 @@ class AudioManager {
       await _audioPlayer!.dispose();
       _audioPlayer = null;
     }
+  }
+}
+
+class RoundCountdownWidget extends StatelessWidget {
+  final int duration;
+  final VoidCallback onComplete;
+
+  const RoundCountdownWidget({
+    Key? key,
+    required this.duration,
+    required this.onComplete,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CountdownTimer(
+      duration: duration,
+      onComplete: onComplete,
+    );
   }
 }

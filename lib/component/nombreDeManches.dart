@@ -5,16 +5,16 @@ import 'package:blindtestlol_flutter_app/models/models.dart';
 import 'package:blindtestlol_flutter_app/services/gameServices.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
 
-class nombreDeManches extends StatefulWidget {
+class NombreDeManches extends StatefulWidget {
   final User user;
 
-  const nombreDeManches({Key? key, required this.user}) : super(key: key);
+  const NombreDeManches({Key? key, required this.user}) : super(key: key);
 
   @override
-  _nombreDeManchesState createState() => _nombreDeManchesState();
+  _NombreDeManchesState createState() => _NombreDeManchesState();
 }
 
-class _nombreDeManchesState extends State<nombreDeManches> {
+class _NombreDeManchesState extends State<NombreDeManches> {
   int roundToPlay = 5; // Default value
   final GameService gameService = GameService('http://localhost:8080');
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -27,8 +27,7 @@ class _nombreDeManchesState extends State<nombreDeManches> {
     _audioPlayer.play(AssetSource(filePath));
   }
 
-  void _showCountdownAndPlayMusic(String musicId) {
-    // Navigate to AnswerPhasePage directly without showing the dialog
+  void _showCountdownAndPlayMusic(String musicId, String musicName, String musicType, String musicDate) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AnswerPhasePage(
@@ -36,6 +35,9 @@ class _nombreDeManchesState extends State<nombreDeManches> {
           currentRound: currentRound,
           totalRounds: totalRounds,
           initialMusicId: musicId,
+          initialMusicName: musicName,
+          initialMusicType: musicType,
+          initialMusicDate: musicDate,
         ),
       ),
     );
@@ -48,9 +50,14 @@ class _nombreDeManchesState extends State<nombreDeManches> {
     currentRound = 1;
     totalRounds = nombreManches;
 
-    final String? initialMusicId = await gameService.playRound(currentGameId!);
-    if (initialMusicId != null) {
-      _showCountdownAndPlayMusic(initialMusicId);
+    final PlayRoundResponse? playRoundResponse = await gameService.playRound(currentGameId!);
+    if (playRoundResponse != null) {
+      _showCountdownAndPlayMusic(
+        playRoundResponse.token,
+        playRoundResponse.name,
+        playRoundResponse.type,
+        playRoundResponse.date,
+      );
     } else {
       print('Aucun ID de musique initial reçu.');
     }
@@ -58,7 +65,6 @@ class _nombreDeManchesState extends State<nombreDeManches> {
 
   @override
   Widget build(BuildContext context) {
-    ;
     return Scaffold(
       body: Stack(
         children: [
@@ -148,7 +154,7 @@ class _nombreDeManchesState extends State<nombreDeManches> {
                             ), // Taille du texte modifiée
                           ),
                         ),
-                        SizedBox(height: 40),
+                        const SizedBox(height: 40),
                         ElevatedButton(
                           onPressed: () => _startNewGame(10),
                           style: ButtonStyle(
@@ -192,7 +198,7 @@ class _nombreDeManchesState extends State<nombreDeManches> {
                             shape: MaterialStateProperty.all<OutlinedBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
-                                side: BorderSide(
+                                side: const BorderSide(
                                   color: AppColors
                                       .colorTextTitle, // Couleur de la bordure extérieure
                                   width:

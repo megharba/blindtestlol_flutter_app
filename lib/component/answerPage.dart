@@ -1,13 +1,13 @@
-// ignore_for_file: empty_catches
-
 import 'dart:convert';
+import 'dart:math';
+
 import 'package:blindtestlol_flutter_app/component/gameOverScreen.dart';
+import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:blindtestlol_flutter_app/models/models.dart';
 import 'package:blindtestlol_flutter_app/services/gameServices.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
-import 'package:flutter/material.dart';
-import 'dart:math';
-
+import 'package:blindtestlol_flutter_app/component/responsePage.dart';
 import 'package:flutter/services.dart';
 
 class AnswerPhasePage extends StatefulWidget {
@@ -15,6 +15,9 @@ class AnswerPhasePage extends StatefulWidget {
   final int totalRounds;
   final int currentRound;
   final String initialMusicId;
+  final String initialMusicName;
+  final String initialMusicType;
+  final String initialMusicDate;
 
   const AnswerPhasePage({
     Key? key,
@@ -22,6 +25,9 @@ class AnswerPhasePage extends StatefulWidget {
     required this.totalRounds,
     required this.currentRound,
     required this.initialMusicId,
+    required this.initialMusicName,
+    required this.initialMusicType,
+    required this.initialMusicDate,
   }) : super(key: key);
 
   @override
@@ -32,21 +38,32 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final GameService gameService = GameService('http://localhost:8080');
+  final AudioPlayer _audioPlayer = AudioPlayer();
   final TextEditingController _propositionController = TextEditingController();
-  final TextEditingController _typeController =
-      TextEditingController(text: "TYPE DE LA MUSIQUE");
+  final TextEditingController _typeController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
 
-  String? nextMusicId;
   late AnimationController _animationController;
   late Animation<double> _animation;
-  int currentRound = 1; // Initialisé à 1 comme prévu
+  int currentRound = 1;
+  int currentScore = 0;
+  int currentCombo = 0;
   late String _randomImagePath = 'assets/images/gif/sticker_1.gif';
+  bool showRoundCountdown = false;
+
+  String? correctedName;
+  String? correctedType;
+  String? correctedDate;
+  String? previousMusicId;
+  String? previousMusicType;
+  String? previousMusicDate;
+  String? previousCorrectedName;
+  String? previousMusicToken;
 
   @override
   void initState() {
     super.initState();
-    _initRandomImagePath(); // Ajoutez cet appel
+    _initRandomImagePath();
 
     currentRound = widget.currentRound;
     _animationController = AnimationController(
@@ -54,13 +71,13 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
       duration: Duration(milliseconds: 500),
     );
     _animation = Tween<double>(
-      begin: currentRound / widget.totalRounds,
-      end: currentRound / widget.totalRounds,
+      begin: widget.totalRounds > 0 ? currentRound / widget.totalRounds : 0,
+      end: widget.totalRounds > 0 ? currentRound / widget.totalRounds : 0,
     ).animate(_animationController);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        AudioManager.instance.playMusic(widget.initialMusicId);
+        _showInitialCountdownAndPlayMusic(widget.initialMusicId);
       }
     });
   }
@@ -89,7 +106,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
 
   @override
   void dispose() {
-    AudioManager.instance.stopMusic();
+    _audioPlayer.stop();
     _animationController.dispose();
     _propositionController.dispose();
     _typeController.dispose();
@@ -97,7 +114,10 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
     super.dispose();
   }
 
-  void _showCountdownAndPlayMusic(String musicId) {
+  void _showInitialCountdownAndPlayMusic(String musicId) {
+    setState(() {
+      showRoundCountdown = true;
+    });
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -108,7 +128,8 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
             seconds: 5,
             onComplete: () {
               Navigator.of(context).pop();
-              AudioManager.instance.playMusic(musicId);
+              _audioPlayer.play(AssetSource('song/$musicId.mp3'));
+              _startRoundCountdown();
             },
           ),
         );
@@ -116,11 +137,41 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
     );
   }
 
-  void _submitResponse() async {
+  void _showNextCountdownAndPlayMusic(String musicId, int score, int combo) {
+    setState(() {
+      currentScore = score;
+      currentCombo = combo;
+      showRoundCountdown = true;
+    });
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: ScoreComboCountdownWidget(
+            seconds: 5,
+            onComplete: () {
+              Navigator.of(context).pop();
+              _audioPlayer.play(AssetSource('song/$musicId.mp3'));
+              _startRoundCountdown();
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void _startRoundCountdown() {
+    setState(() {
+      showRoundCountdown = true;
+    });
+  }
+
+  Future<void> _submitResponse() async {
     if (!_formKey.currentState!.validate()) return;
 
-    await AudioManager.instance
-        .stopMusic(); // Stop current music before submitting
+    await _audioPlayer.stop();
 
     try {
       final GameResponse apiResponse = await gameService.postPlayerResponse(
@@ -128,48 +179,102 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
         musicToken: widget.initialMusicId,
         proposition: _propositionController.text,
         type: _typeController.text,
-        date: _dateController
-            .text, // Ensure date is not null and is correctly formatted
+        date: _dateController.text,
       );
+
+      final String userProposition = _propositionController.text;
 
       _propositionController.clear();
       _typeController.clear();
       _dateController.clear();
 
+      // Fetch the corrected response immediately after submitting the player's response
+      final playRoundResponse = await gameService.playRound(widget.gameId);
+
       setState(() {
-        currentRound = apiResponse.round + 1; // Mettre à jour le round actuel
+        currentRound = apiResponse.round;
+        currentScore = apiResponse.player.score;
+        currentCombo = apiResponse.player.combo;
         _animation = Tween<double>(
           begin: _animation.value,
-          end: currentRound / widget.totalRounds,
+          end: widget.totalRounds > 0 ? currentRound / widget.totalRounds : 0,
         ).animate(_animationController);
         _animationController.forward(from: 0.0);
+        showRoundCountdown = false;
 
-        // Réinitialiser le chemin de l'image aléatoire
-        _initRandomImagePath(); // Ajoutez cet appel
+        // Set corrected values from the previous playRoundResponse
+        previousMusicType = apiResponse.musicPlayed[currentRound - 1].type;
+        previousMusicDate = apiResponse.musicPlayed[currentRound - 1].date;
+        previousCorrectedName = apiResponse.musicPlayed[currentRound - 1].name;
+        previousMusicToken = apiResponse.musicPlayed[currentRound - 1].token;
+
+        // Update the current music info for the next round
+        correctedName = playRoundResponse?.name;
+        correctedType = playRoundResponse?.type;
+        correctedDate = playRoundResponse?.date;
+
+        // Mettre à jour _randomImagePath pour le nouveau round
+        _initRandomImagePath();
       });
 
-      if (!apiResponse.over) {
-        nextMusicId = await gameService.playRound(widget.gameId);
-        if (nextMusicId != null) {
-          _showCountdownAndPlayMusic(nextMusicId!);
-        } else {}
-      } else {
-        // Handle game end scenario by navigating to GameOverScreen
-        Navigator.of(context).pushReplacement(
+      if (apiResponse.over) {
+        // Afficher la ResponsePage pour le dernier round avant de naviguer vers GameOverScreen
+        Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => GameOverScreen(
+            builder: (context) => ResponsePage(
               score: apiResponse.player.score,
               combo: apiResponse.player.combo,
-              mastery: apiResponse.player.mastery,
+              musicToken: previousMusicToken!,
+              musicType: previousMusicType!,
+              musicDate: previousMusicDate!,
+              userProposition: userProposition,
+              correctedName: previousCorrectedName!,
+              onNextRound: () async {
+                // Attendez une courte durée avant de naviguer vers GameOverScreen
+                await Future.delayed(Duration(milliseconds: 300));
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => GameOverScreen(
+                      score: apiResponse.player.score,
+                      combo: apiResponse.player.combo,
+                      mastery: apiResponse.player.mastery,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      } else {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ResponsePage(
+              score: apiResponse.player.score,
+              combo: apiResponse.player.combo,
+              musicToken: previousMusicToken!,
+              musicType: previousMusicType!,
+              musicDate: previousMusicDate!,
+              userProposition: userProposition,
+              correctedName: previousCorrectedName!,
+              onNextRound: () async {
+                Navigator.of(context).pop();
+                await Future.delayed(Duration(milliseconds: 300));
+                if (playRoundResponse != null) {
+                  _showNextCountdownAndPlayMusic(playRoundResponse.token, apiResponse.player.score, apiResponse.player.combo);
+                }
+                // Mettre à jour _randomImagePath pour le nouveau round
+                _initRandomImagePath();
+              },
             ),
           ),
         );
       }
-    } catch (e) {}
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   void _onCountdownComplete() {
-    // Commencer le round suivant ici
     _submitResponse();
   }
 
@@ -182,21 +287,23 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            AudioManager.instance.stopMusic();
+            _audioPlayer.stop();
             Navigator.of(context).pop();
           },
         ),
         title: Image.asset(
-          ImageAssets.title, // Chemin de votre image
-          width: 150, // Ajustez la largeur selon vos besoins
+          ImageAssets.title,
+          width: 150,
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: CountdownTimer(
-              duration: 25,
-              onComplete: _onCountdownComplete,
-            ),
+            child: showRoundCountdown
+                ? CountdownWidget(
+                    seconds: 60,
+                    onComplete: _onCountdownComplete,
+                  )
+                : SizedBox.shrink(),
           ),
         ],
       ),
@@ -206,7 +313,6 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
         color: AppColors.colorNoirHextech,
         child: Column(
           children: [
-            // Barre de progression animée pour les rounds
             AnimatedBuilder(
               animation: _animation,
               builder: (context, child) {
@@ -235,29 +341,24 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // Image circulaire
                   Container(
-                    margin: const EdgeInsets.only(
-                        top: 50), // Décalage de 50 par rapport au haut
-                    width: 300, // Taille de l'image circulaire
+                    margin: const EdgeInsets.only(top: 50),
+                    width: 300,
                     height: 300,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors
-                          .transparent, // Couleur de fond de l'image circulaire
+                      color: Colors.transparent,
                     ),
                     child: Image.asset(
                       _randomImagePath,
-                      width: 250, // Taille de l'image circulaire
+                      width: 250,
                       height: 250,
-                      fit: BoxFit
-                          .cover, // Ajuster la taille de l'image pour couvrir la zone donnée
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ],
               ),
             ),
-
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -273,8 +374,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                           labelText: 'Quel est le nom de cette musique',
                           labelStyle:
                               TextStyle(color: AppColors.colorTextTitle),
-                          hintText:
-                              'NOM DE LA MUSIQUE', // Placeholder pour la proposition
+                          hintText: 'NOM DE LA MUSIQUE',
                           hintStyle: TextStyle(
                               color: AppColors.colorTextTitle.withOpacity(0.5)),
                           enabledBorder: OutlineInputBorder(
@@ -286,7 +386,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                                 BorderSide(color: AppColors.colorTextTitle),
                           ),
                         ),
-                        validator: (value) => value!.isEmpty ? '' : null,
+                        validator: (value) => value!.isEmpty ? 'Ce champ est requis' : null,
                       ),
                       const SizedBox(height: 20),
                       DropdownButtonFormField<String>(
@@ -294,15 +394,23 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                             ? _typeController.text
                             : null,
                         items: [
-                          "TYPE DE LA MUSIQUE", "SKIN", "EVENT",
-                          "CHAMPION",
-                          // Ajoutez des options factices ici si nécessaire
-                        ].map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
+                          DropdownMenuItem<String>(
+                            value: "TYPE DE LA MUSIQUE",
+                            child: Text("TYPE DE LA MUSIQUE"),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: "SKIN",
+                            child: Text("SKIN"),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: "EVENT",
+                            child: Text("EVENT"),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: "CHAMPION",
+                            child: Text("CHAMPION"),
+                          ),
+                        ],
                         onChanged: (String? newValue) {
                           setState(() {
                             _typeController.text = newValue!;
@@ -321,7 +429,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                                 BorderSide(color: AppColors.colorTextTitle),
                           ),
                         ),
-                        validator: (value) => value == null ? '' : null,
+                        validator: (value) => value == null ? 'Ce champ est requis' : null,
                       ),
                       const SizedBox(height: 20),
                       DropdownButtonFormField<int>(
@@ -343,8 +451,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                         ],
                         onChanged: (int? newValue) {
                           setState(() {
-                            _dateController.text =
-                                newValue.toString(); // Conversion en string
+                            _dateController.text = newValue.toString();
                           });
                         },
                         decoration: const InputDecoration(
@@ -360,7 +467,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                                 BorderSide(color: AppColors.colorTextTitle),
                           ),
                         ),
-                        validator: (value) => value == null ? '' : null,
+                        validator: (value) => value == null ? 'Ce champ est requis' : null,
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(

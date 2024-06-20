@@ -17,7 +17,7 @@ class ModesDeJeuPage extends StatefulWidget {
   ModesDeJeuPage({
     Key? key,
     required this.user,
-    this.currentGameId, // Provide default values or make them nullable
+    this.currentGameId,
     this.currentRound = 0,
     this.totalRounds = 0,
     required this.gameService,
@@ -167,7 +167,7 @@ class _ModesDeJeuPageState extends State<ModesDeJeuPage>
                                   borderRadius: BorderRadius.circular(30.0),
                                   child: Container(
                                     width: MediaQuery.of(context).size.width *
-                                        0.6, // Largeur fixe
+                                        0.6,
                                     decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(
@@ -235,16 +235,21 @@ class _ModesDeJeuPageState extends State<ModesDeJeuPage>
     widget.currentRound = 1;
     widget.totalRounds = roundToPlay;
 
-    final String? initialMusicId =
+    final PlayRoundResponse? playRoundResponse =
         await widget.gameService.playRound(widget.currentGameId!);
-    if (initialMusicId != null) {
-      _showCountdownAndPlayMusic(initialMusicId);
+    if (playRoundResponse != null) {
+      _showCountdownAndPlayMusic(
+        playRoundResponse.token,
+        playRoundResponse.name,
+        playRoundResponse.type,
+        playRoundResponse.date,
+      );
     } else {
       print('No initialMusicId received.');
     }
   }
 
-  void _showCountdownAndPlayMusic(String musicId) {
+  void _showCountdownAndPlayMusic(String musicId, String musicName, String musicType, String musicDate) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AnswerPhasePage(
@@ -252,6 +257,9 @@ class _ModesDeJeuPageState extends State<ModesDeJeuPage>
           currentRound: widget.currentRound,
           totalRounds: widget.totalRounds,
           initialMusicId: musicId,
+          initialMusicName: musicName,
+          initialMusicType: musicType,
+          initialMusicDate: musicDate,
         ),
       ),
     );

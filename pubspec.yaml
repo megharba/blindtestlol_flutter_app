@@ -36,6 +36,8 @@ flutter:
     - assets/images/logo/
     - assets/images/gif/
     - assets/musicBackground/
+    - assets/images/combos/
+    - assets/images/results/
   fonts:
     - family: CustomFont1
       fonts:

@@ -1,8 +1,6 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/models.dart'; // Ensure this import path is correct
+import 'package:blindtestlol_flutter_app/models/models.dart';
 
 class GameService {
   String baseUrl = "http://localhost:8080/";
@@ -16,28 +14,23 @@ class GameService {
         await http.post(url, headers: {'Content-Type': 'application/json'});
 
     if (response.statusCode != 200) {
+      print('Failed to create game: ${response.statusCode}');
       throw Exception('Failed to create game: ${response.statusCode}');
     }
-    return GameResponse.fromJson(jsonDecode(response.body));
+    final gameResponse = GameResponse.fromJson(jsonDecode(response.body));
+    print('createGame response: $gameResponse');
+    return gameResponse;
   }
 
-// Method to post player responses
-  Future<String?> playRound(String gameId) async {
+  Future<PlayRoundResponse?> playRound(String gameId) async {
     final url = Uri.parse('$baseUrl/game/play-round?gameId=$gameId');
     try {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> responseBody = jsonDecode(response.body);
-        if (responseBody.containsKey('token')) {
-          // ignore: duplicate_ignore
-          // ignore: avoid_print
-          print('playRound response: $responseBody'); // Logging the response
-          return responseBody['token'] as String?;
-        } else {
-          print('Token not found in the response body');
-          return null;
-        }
+        final playRoundResponse = PlayRoundResponse.fromJson(jsonDecode(response.body));
+        print('playRound response: $playRoundResponse');
+        return playRoundResponse;
       } else {
         print('Error playing round with status code: ${response.statusCode}');
         return null;
@@ -74,8 +67,7 @@ class GameService {
 
     if (response.statusCode == 200) {
       final responseJson = jsonDecode(response.body);
-      print(
-          'postPlayerResponse response: $responseJson'); // Logging the response
+      print('postPlayerResponse response: $responseJson');
       return GameResponse.fromJson(responseJson);
     } else {
       print(

@@ -28,7 +28,7 @@ class _AccueilPageState extends State<AccueilPage> {
     _audioPlayer.play(AssetSource(filePath));
   }
 
-  void _showCountdownAndPlayMusic(String musicId) {
+  void _showCountdownAndPlayMusic(String musicId, String musicName, String musicType, String musicDate) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AnswerPhasePage(
@@ -36,6 +36,9 @@ class _AccueilPageState extends State<AccueilPage> {
           currentRound: 1,
           totalRounds: 0,
           initialMusicId: musicId,
+          initialMusicName: musicName,
+          initialMusicType: musicType,
+          initialMusicDate: musicDate,
         ),
       ),
     );

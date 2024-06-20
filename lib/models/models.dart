@@ -16,11 +16,10 @@ class PlayerResponse {
       throw FormatException('Invalid or missing date');
     }
     return PlayerResponse(
-      musicId: json['musicId'] ?? 'Unknown', // Provide default if null
+      musicId: json['musicId'] ?? 'Unknown',
       proposition: json['proposition'] ?? 'Unknown',
       type: json['type'] ?? 'Unknown',
-      date: DateTime.tryParse(json['date']) ??
-          DateTime.now(), // Handle null and parsing errors
+      date: DateTime.tryParse(json['date']) ?? DateTime.now(),
     );
   }
 
@@ -35,15 +34,15 @@ class PlayerResponse {
 }
 
 class GameResponse {
-  final String? gameId; // Keep nullable if unsure
+  final String? gameId;
   final Player player;
   final int roundToPlay;
   final int round;
-  final List<Music> musicPlayed;
+  final List<MusicPlayed> musicPlayed;
   final bool over;
 
   GameResponse({
-    this.gameId, // Accept null
+    this.gameId,
     required this.player,
     required this.roundToPlay,
     required this.round,
@@ -58,7 +57,7 @@ class GameResponse {
       roundToPlay: json['roundToPlay'] as int,
       round: json['round'] as int,
       musicPlayed: (json['musicPlayed'] as List)
-          .map((x) => Music.fromJson(x as Map<String, dynamic>))
+          .map((x) => MusicPlayed.fromJson(x as Map<String, dynamic>))
           .toList(),
       over: json['over'] as bool,
     );
@@ -148,6 +147,37 @@ class Player {
   }
 }
 
+class PlayRoundResponse {
+  final String token;
+  final String name;
+  final String date;
+  final String type;
+
+  PlayRoundResponse({
+    required this.token,
+    required this.name,
+    required this.date,
+    required this.type,
+  });
+
+  factory PlayRoundResponse.fromJson(Map<String, dynamic> json) {
+    return PlayRoundResponse(
+      token: json['token'],
+      name: json['name'],
+      date: json['date'],
+      type: json['type'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'token': token,
+      'name': name,
+      'date': date,
+      'type': type,
+    };
+  }
+}
 
 class User {
   final int id;
@@ -241,6 +271,41 @@ class UserHighScore {
     return {
       'userName': userName,
       'highScore': highScore.toJson(),
+    };
+  }
+}
+class MusicPlayed {
+  final String token;
+  final String name;
+  final String date;
+  final String type;
+  final List<String> aliases;
+
+  MusicPlayed({
+    required this.token,
+    required this.name,
+    required this.date,
+    required this.type,
+    required this.aliases,
+  });
+
+  factory MusicPlayed.fromJson(Map<String, dynamic> json) {
+    return MusicPlayed(
+      token: json['token'] ?? 'Unknown',
+      name: json['name'] ?? 'Unknown',
+      date: json['date'] ?? 'Unknown',
+      type: json['type'] ?? 'Unknown',
+      aliases: List<String>.from(json['aliases'] ?? []),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'token': token,
+      'name': name,
+      'date': date,
+      'type': type,
+      'aliases': aliases,
     };
   }
 }

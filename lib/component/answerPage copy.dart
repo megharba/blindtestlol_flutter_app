@@ -147,7 +147,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
       });
 
       if (!apiResponse.over) {
-        nextMusicId = await gameService.playRound(widget.gameId);
+        nextMusicId = (await gameService.playRound(widget.gameId)) as String?;
         if (nextMusicId != null) {
           _showCountdownAndPlayMusic(nextMusicId!);
         } else {}

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class AccueilPage extends StatefulWidget {
   final User user;
 
-  AccueilPage({required this.user});
+  const AccueilPage({required this.user, Key? key}) : super(key: key);
 
   @override
   _AccueilPageState createState() => _AccueilPageState();
@@ -29,14 +29,13 @@ class _AccueilPageState extends State<AccueilPage> {
     _audioPlayer.play(AssetSource(filePath));
   }
 
-  void _showCountdownAndPlayMusic(String musicId) {
+  void _showCountdownAndPlayMusic(String musicId, String name, String type, String date) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        // Afficher un indicateur de progression au lieu d'un compte à rebours
         Future.delayed(Duration(seconds: 1), () {
-          Navigator.of(context).pop(); // Fermer le dialogue après 1 seconde
+          Navigator.of(context).pop(); // Close the dialog after 1 second
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => AnswerPhasePage(
@@ -44,6 +43,9 @@ class _AccueilPageState extends State<AccueilPage> {
                 currentRound: currentRound,
                 totalRounds: totalRounds,
                 initialMusicId: musicId,
+                initialMusicName:name,
+                initialMusicType:type,
+                initialMusicDate:date
               ),
             ),
           );
@@ -112,17 +114,15 @@ class _AccueilPageState extends State<AccueilPage> {
             ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  final GameResponse gameResponse = await gameService
-                      .createGame(widget.user.uid, roundToPlay);
+                  final GameResponse gameResponse = await gameService.createGame(widget.user.uid, roundToPlay);
                   currentGameId = gameResponse.gameId;
                   currentRound = 1;
                   totalRounds = roundToPlay;
 
-                  final String? initialMusicId =
-                      await gameService.playRound(currentGameId!);
+                  final PlayRoundResponse? playRoundResponse = await gameService.playRound(currentGameId!);
                   Navigator.of(context).pop();
-                  if (initialMusicId != null) {
-                    _showCountdownAndPlayMusic(initialMusicId);
+                  if (playRoundResponse != null) {
+                    _showCountdownAndPlayMusic(playRoundResponse.token, playRoundResponse.name,playRoundResponse.type,playRoundResponse.date);
                   } else {
                     print('No initialMusicId received.');
                   }
