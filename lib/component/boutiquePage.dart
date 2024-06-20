@@ -49,16 +49,9 @@ class _BoutiquePageState extends State<BoutiquePage> {
       appBar: AppBar(
         title: Text('Boutique'),
         backgroundColor: AppColors.colorNoirHextech,
-        foregroundColor: AppColors.colorTextTitle,
+        foregroundColor: Colors.white,
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.black, Colors.grey[900]!],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: GridView.builder(
@@ -87,7 +80,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.colorNoirHextech,
           borderRadius: BorderRadius.circular(20.0),
           boxShadow: [
             BoxShadow(
@@ -97,8 +90,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
             ),
           ],
           border: Border.all(
-            color: AppColors
-                .colorTextTitle, // Remplacez par votre couleur préférée
+            color: AppColors.colorNoirHextech,
             width: 1.0,
           ),
         ),
@@ -117,8 +109,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
             Container(
               padding: EdgeInsets.all(8.0),
               decoration: BoxDecoration(
-                color: AppColors
-                    .colorTextTitle, // Remplacez par votre couleur préférée
+                color: AppColors.colorNoirHextech,
                 borderRadius:
                     BorderRadius.vertical(bottom: Radius.circular(20.0)),
               ),

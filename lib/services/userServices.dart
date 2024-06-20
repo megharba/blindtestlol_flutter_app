@@ -35,4 +35,21 @@ class UserService {
       throw Exception('Failed to connect user. Status: ${response.statusCode}');
     }
   }
+
+  Future<User> updatePassword(String userUid, String newPassword) async {
+    final response = await http.put(
+      Uri.parse(
+          '${baseUrl}user/change-password?uid=$userUid&password=$newPassword'),
+      headers: <String, String>{
+        'accept': 'application/hal+json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return User.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception(
+          'Failed to update password. Status: ${response.statusCode}');
+    }
+  }
 }

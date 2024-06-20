@@ -1,3 +1,4 @@
+import 'package:blindtestlol_flutter_app/services/userServices.dart';
 import 'package:flutter/material.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
 import 'package:blindtestlol_flutter_app/models/models.dart';
@@ -110,9 +111,11 @@ class _ComptePageState extends State<ComptePage>
                     ],
                   ),
                   SizedBox(height: 20),
-                  _buildEditableField('Nom d\'utilisateur', nameController),
+                  _buildEditableField('Nom d\'utilisateur', nameController,
+                      isEditable: false),
                   SizedBox(height: 16),
-                  _buildEditableField('Adresse e-mail', emailController),
+                  _buildEditableField('Adresse e-mail', emailController,
+                      isEditable: false),
                   SizedBox(height: 16),
                   _buildEditableField(
                       'Nouveau mot de passe', passwordController,
@@ -142,17 +145,40 @@ class _ComptePageState extends State<ComptePage>
   // Méthode pour construire le bouton personnalisé
   Widget _buildSaveButton() {
     return ElevatedButton(
-      onPressed: () {
-        if (passwordController.text == confirmPasswordController.text) {
+      onPressed: () async {
+        String newPassword = passwordController.text;
+        String confirmPassword = confirmPasswordController.text;
+
+        if (newPassword.isNotEmpty && newPassword == confirmPassword) {
+          try {
+            UserService userService = UserService();
+            User updatedUser =
+                await userService.updatePassword(widget.user.uid, newPassword);
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Mot de passe mis à jour avec succès.'),
+              ),
+            );
+            setState(() {});
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content:
+                    Text('Erreur lors de la mise à jour du mot de passe: $e'),
+              ),
+            );
+          }
+        } else if (newPassword.isNotEmpty && newPassword != confirmPassword) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Modifications sauvegardées avec succès.'),
+              content: Text('Les mots de passe ne correspondent pas.'),
             ),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Les mots de passe ne correspondent pas.'),
+              content: Text('Modifications sauvegardées avec succès.'),
             ),
           );
         }
@@ -180,7 +206,7 @@ class _ComptePageState extends State<ComptePage>
 
   // Widget pour construire un champ éditable
   Widget _buildEditableField(String label, TextEditingController controller,
-      {bool isPassword = false}) {
+      {bool isPassword = false, bool isEditable = true}) {
     return Container(
       padding: EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -202,23 +228,39 @@ class _ComptePageState extends State<ComptePage>
               fontFamily: 'CustomFont2',
             ),
           ),
-          TextField(
-            controller: controller,
-            obscureText: isPassword,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'CustomFont2',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: isPassword
-                  ? 'Modifier votre mot de passe'
-                  : 'Modifier votre $label',
-              hintStyle: TextStyle(
-                color: Colors.grey,
-              ),
-            ),
-          ),
+          isEditable
+              ? TextField(
+                  controller: controller,
+                  obscureText: isPassword,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'CustomFont2',
+                  ),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: isPassword
+                        ? 'Modifier votre mot de passe'
+                        : 'Modifier votre $label',
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                )
+              : SizedBox(
+                  height:
+                      48.0, // Ajustez cette hauteur pour correspondre à celle des TextFields
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      controller.text,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'CustomFont2',
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
         ],
       ),
     );
