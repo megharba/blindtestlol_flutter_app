@@ -84,6 +84,8 @@ class Mp4Assets {
       'assets/musicBackground/yuumi.mp4';
   static const String imageBackgroundProfil3 =
       'assets/musicBackground/season.mp4';
+  static const String imageBackgroundParticle =
+      'assets/musicBackground/particle.mp4';
 }
 
 class AproposAssets {
@@ -101,8 +103,6 @@ class ProblemAssets {
 class Mp3Assets {
   static const soundRemix = 'assets/musicBackground/remix.mp3';
 }
-
-
 
 class CountdownWidget extends StatefulWidget {
   final int seconds;
@@ -172,7 +172,8 @@ class ScoreComboCountdownWidget extends StatefulWidget {
   });
 
   @override
-  _ScoreComboCountdownWidgetState createState() => _ScoreComboCountdownWidgetState();
+  _ScoreComboCountdownWidgetState createState() =>
+      _ScoreComboCountdownWidgetState();
 }
 
 class _ScoreComboCountdownWidgetState extends State<ScoreComboCountdownWidget> {

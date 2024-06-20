@@ -4,6 +4,9 @@ import 'package:blindtestlol_flutter_app/utils/utils.dart';
 import 'package:blindtestlol_flutter_app/component/accueilPage.dart';
 import 'package:blindtestlol_flutter_app/component/classementPage.dart';
 import 'package:blindtestlol_flutter_app/models/models.dart';
+import 'package:blindtestlol_flutter_app/component/comptePage.dart'; // Import the ComptePage
+
+import 'background_video.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
@@ -58,22 +61,30 @@ class _HomePageState extends State<HomePage>
     );
   }
 
+  void _goToCompte() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ComptePage(user: widget.user)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // Background image
+          // Background video
           Positioned.fill(
-            child: Image.asset(
-              ImageAssets.imageBackground,
-              fit: BoxFit.cover,
+            child: Transform.translate(
+              offset: const Offset(0, -150),
+              child:
+                  BackgroundVideo(videoPath: Mp4Assets.imageBackgroundParticle),
             ),
           ),
-          // Main content
+          // Contenu principal
           Column(
             children: [
-              // Header with logo and profile image
+              // Header avec logo et image de profil
               Container(
                 padding: EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
@@ -120,7 +131,7 @@ class _HomePageState extends State<HomePage>
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text(
-                                    'Points: 500',
+                                    'Points: ${widget.user.totalScore.toString()}',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontFamily: 'CustomFont2',
@@ -140,37 +151,40 @@ class _HomePageState extends State<HomePage>
                         ],
                       ),
                     ),
-                    // Icône à droite
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0xFFCDFAFA),
-                            blurRadius: 5,
-                            spreadRadius: 5,
+                    // Icône à droite (Profil)
+                    GestureDetector(
+                      onTap: _goToCompte, // Navigate to ComptePage when tapped
+                      child: Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xFFCDFAFA),
+                              blurRadius: 5,
+                              spreadRadius: 5,
+                            ),
+                          ],
+                          border: Border.all(
+                            color: AppColors.colorTextTitle,
+                            width: 3,
                           ),
-                        ],
-                        border: Border.all(
-                          color: AppColors.colorTextTitle,
-                          width: 3,
                         ),
-                      ),
-                      child: ClipOval(
-                        child: Image.asset(
-                          ImageAssets.imageLegende1,
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
+                        child: ClipOval(
+                          child: Image.asset(
+                            ImageAssets.imageLegende1,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              // Main page content
+              // Contenu principal de la page
               Expanded(
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 500),

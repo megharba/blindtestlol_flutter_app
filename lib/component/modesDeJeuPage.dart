@@ -21,6 +21,7 @@ class ModesDeJeuPage extends StatefulWidget {
     this.currentRound = 0,
     this.totalRounds = 0,
     required this.gameService,
+    required email,
   }) : super(key: key);
 
   @override
@@ -166,8 +167,8 @@ class _ModesDeJeuPageState extends State<ModesDeJeuPage>
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(30.0),
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.6,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.6,
                                     decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(
@@ -249,7 +250,8 @@ class _ModesDeJeuPageState extends State<ModesDeJeuPage>
     }
   }
 
-  void _showCountdownAndPlayMusic(String musicId, String musicName, String musicType, String musicDate) {
+  void _showCountdownAndPlayMusic(
+      String musicId, String musicName, String musicType, String musicDate) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AnswerPhasePage(

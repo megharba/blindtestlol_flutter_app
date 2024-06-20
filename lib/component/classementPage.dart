@@ -40,10 +40,6 @@ class _ClassementPageState extends State<ClassementPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Classement'),
-        backgroundColor: Colors.black,
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

@@ -4,7 +4,7 @@ import 'package:blindtestlol_flutter_app/utils/utils.dart';
 class ResponsePage extends StatelessWidget {
   final int score;
   final int combo;
-  final String musicToken; // Utiliser le token pour l'image
+  final String musicToken;
   final String musicType;
   final String musicDate;
   final String userProposition;
@@ -25,158 +25,224 @@ class ResponsePage extends StatelessWidget {
 
   Widget _buildComboImage(int combo) {
     if (combo >= 0 && combo <= 5) {
-      return Image.asset(
-        'assets/images/combos/combo$combo.png',
-        width: 120,
-        height: 120,
+      return Container(
+        margin: EdgeInsets.only(
+            top: 20,
+            left:
+                10), // décalages de 100 pixels vers le bas et 30 pixels vers la gauche
+        child: Image.asset(
+          'assets/images/combos/combo$combo.png',
+          width: 120,
+          height: 120,
+        ),
       );
     }
-    return Container(); // Return an empty container if combo is out of range
+    return Container(); // Add a default return statement
   }
 
   @override
   Widget build(BuildContext context) {
-    final String musicImagePath =
-        'assets/images/results/$musicToken.png'; // Utiliser le token pour l'image
+    final String musicImagePath = 'assets/images/results/$musicToken.png';
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: AppColors.colorNoirHextech,
-        title: const Text('Response'),
-      ),
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
         color: AppColors.colorNoirHextech,
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Stack(
+            key: Key('response_page_stack'), // Clé ajoutée au Stack principal
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
+                  SizedBox(height: 16),
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Score: $score',
-                        style: const TextStyle(
-                          color: AppColors.colorText,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xFFCDFAFA),
+                              blurRadius: 5,
+                              spreadRadius: 5,
+                            ),
+                          ],
+                          border: Border.all(
+                            color: AppColors.colorTextTitle,
+                            width: 3,
+                          ),
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(
+                            ImageAssets.imageLegende1,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 5),
-                      Text(
-                        'Combo: $combo',
-                        style: const TextStyle(
-                          color: AppColors.colorText,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Proposition:',
+                              style: const TextStyle(
+                                color: AppColors.colorText,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              userProposition,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                  // Icône de profil à droite
+                  SizedBox(height: 20),
                   Container(
-                    width: 80,
-                    height: 80,
+                    padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0xFFCDFAFA),
-                          blurRadius: 5,
-                          spreadRadius: 5,
-                        ),
-                      ],
+                      color: AppColors.colorNoirHextech.withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: AppColors.colorTextTitle,
-                        width: 3,
+                        width: 2,
                       ),
                     ),
-                    child: ClipOval(
-                      child: Image.asset(
-                        ImageAssets.imageLegende1,
-                        width: 80,
-                        height: 80,
-                        fit: BoxFit.cover,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildInfoRow('Bonne Réponse', correctedName),
+                        _buildInfoRow('Type de la musique', musicType),
+                        _buildInfoRow('Date de la musique', musicDate),
+                        const SizedBox(height: 16),
+                        Center(
+                          child: Image.asset(
+                            musicImagePath,
+                            width: 250,
+                            height: 250,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Icon(Icons.broken_image,
+                                  size: 250, color: Colors.red);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Center(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        border: Border.all(
+                          color: AppColors.colorTextTitle,
+                          width: 2,
+                        ),
+                      ),
+                      child: TextButton(
+                        onPressed: onNextRound,
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.colorTextTitle,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 15,
+                          ),
+                        ),
+                        child: const Text(
+                          'Continuer la partie',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                   ),
+                  SizedBox(height: 20),
                 ],
               ),
-              const SizedBox(height: 10),
-              _buildComboImage(combo),
-              const SizedBox(height: 10),
-              Center(
-                child: Image.asset(
-                  musicImagePath,
-                  width: 250,
-                  height: 250,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Icon(Icons.broken_image,
-                        size: 250, color: Colors.red);
-                  },
+              Positioned(
+                top: 16,
+                right: 16,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Score: $score',
+                      style: const TextStyle(
+                        color: AppColors.colorText,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      'Combo: $combo',
+                      style: const TextStyle(
+                        color: AppColors.colorText,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    _buildComboImage(combo),
+                  ],
                 ),
               ),
-              const SizedBox(height: 20),
-              Text(
-                'Proposition: $userProposition',
-                style: const TextStyle(
-                  color: AppColors.colorText,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Corrected Name: $correctedName',
-                style: const TextStyle(
-                  color: AppColors.colorText,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Type: $musicType',
-                style: const TextStyle(
-                  color: AppColors.colorText,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Date: $musicDate',
-                style: const TextStyle(
-                  color: AppColors.colorText,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Spacer(),
-              ElevatedButton(
-                onPressed: onNextRound,
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: AppColors.colorNoirHextech,
-                  backgroundColor: AppColors.colorTextTitle,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 50,
-                    vertical: 15,
-                  ),
-                ),
-                child: const Text('Continuer'),
-              ),
-              const SizedBox(height: 20),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildInfoRow(String title, String content) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '$title:',
+          style: const TextStyle(
+            color: AppColors.colorText,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 5),
+        Container(
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: AppColors.colorTextTitle,
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            content,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+      ],
     );
   }
 }

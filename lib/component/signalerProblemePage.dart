@@ -14,7 +14,8 @@ class SignalerProblemePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Signaler un problème'),
-        backgroundColor: AppColors.colorTextTitle,
+        backgroundColor: AppColors.colorNoirHextech,
+        foregroundColor: AppColors.colorTextTitle,
       ),
       body: Stack(
         children: [

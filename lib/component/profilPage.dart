@@ -1,41 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:blindtestlol_flutter_app/component/SignalerProblemePage.dart';
-import 'package:blindtestlol_flutter_app/component/aProposPage.dart';
 import 'package:blindtestlol_flutter_app/component/boutiquePage.dart';
 import 'package:blindtestlol_flutter_app/models/models.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
 import 'package:blindtestlol_flutter_app/component/loginPage.dart';
 
-import 'comptePage.dart'; // Importez la page de connexion
+import 'aProposPage.dart';
+import 'comptePage.dart'; // Import account page
 
 class ProfilPage extends StatelessWidget {
   final User user;
 
-  const ProfilPage({super.key, required this.user});
+  const ProfilPage({Key? key, required this.user}) : super(key: key);
 
   void _deconnexion(BuildContext context) {
-    // Implémentez ici la logique de déconnexion
-    // Par exemple, vous pouvez effacer les données utilisateur enregistrées localement
-    // Puis vous naviguez vers la page de connexion
+    // Implement logout logic here
+    // For example, clear locally stored user data
+    // Then navigate to login page
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => LoginPage()),
     );
   }
 
+  // Button style similar to ComptePage save button
+  static final ButtonStyle customButtonStyle = ElevatedButton.styleFrom(
+    foregroundColor: Colors.white,
+    backgroundColor:
+        AppColors.colorNoirHextech.withOpacity(0.9), // Opacity added
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10.0), // Rounded corners
+      side: BorderSide(
+        color: AppColors.colorTextTitle, // Border color
+        width: 2.0, // Border width
+      ),
+    ),
+    padding: EdgeInsets.symmetric(vertical: 15),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Profil'),
-      ),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
-              ImageAssets.imageProfilPage, // Chemin de l'image de fond
+              ImageAssets.imageProfilPage, // Background image path
             ),
-            fit: BoxFit.cover, // Ajustement pour couvrir l'espace
-            alignment: Alignment.topCenter, // Aligner l'image en haut
+            fit: BoxFit.cover,
+            alignment: Alignment.topCenter,
           ),
         ),
         child: Padding(
@@ -97,9 +109,9 @@ class ProfilPage extends StatelessWidget {
               ),
               SizedBox(height: 8.0),
               _customButton(
-                text: 'Déconnexion', // Bouton de déconnexion
+                text: 'Déconnexion',
                 onPressed: () {
-                  _deconnexion(context); // Appel de la méthode de déconnexion
+                  _deconnexion(context);
                 },
               ),
             ],
@@ -117,11 +129,7 @@ class ProfilPage extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.white,
-          backgroundColor: AppColors.colorNoirHextech,
-          padding: EdgeInsets.symmetric(vertical: 15),
-        ),
+        style: customButtonStyle, // Apply the custom button style
         child: Text(
           text,
           style: TextStyle(

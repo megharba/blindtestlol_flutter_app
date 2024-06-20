@@ -183,6 +183,7 @@ class User {
   final int id;
   final String name;
   final String uid;
+  final String email;
   final int gamePlayed;
   final List<HighScore> highScore;
   final int totalScore;
@@ -191,6 +192,7 @@ class User {
     required this.id,
     required this.name,
     required this.uid,
+    required this.email,
     required this.gamePlayed,
     required this.highScore,
     required this.totalScore,
@@ -205,6 +207,7 @@ class User {
       id: json['id'],
       name: json['name'],
       uid: json['uid'],
+      email: json['email'],
       gamePlayed: json['gamePlayed'],
       highScore: highScoreItems,
       totalScore: json['totalScore'],
@@ -216,6 +219,7 @@ class User {
       'id': id,
       'name': name,
       'uid': uid,
+      'email': email,
       'gamePlayed': gamePlayed,
       'highScore': highScore.map((i) => i.toJson()).toList(),
       'totalScore': totalScore,
@@ -274,6 +278,7 @@ class UserHighScore {
     };
   }
 }
+
 class MusicPlayed {
   final String token;
   final String name;

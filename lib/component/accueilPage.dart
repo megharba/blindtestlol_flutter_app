@@ -28,7 +28,8 @@ class _AccueilPageState extends State<AccueilPage> {
     _audioPlayer.play(AssetSource(filePath));
   }
 
-  void _showCountdownAndPlayMusic(String musicId, String musicName, String musicType, String musicDate) {
+  void _showCountdownAndPlayMusic(
+      String musicId, String musicName, String musicType, String musicDate) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AnswerPhasePage(
@@ -54,6 +55,7 @@ class _AccueilPageState extends State<AccueilPage> {
           currentRound: 0,
           totalRounds: 0,
           gameService: gameService,
+          email: widget.user.email,
         ),
       ),
     );
@@ -138,7 +140,7 @@ class _ImageButtonPlayState extends State<ImageButtonPlay>
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     )..repeat(reverse: true);
-    _scaleAnimation = Tween<double>(begin: 0.95, end: 1.0).animate(
+    _scaleAnimation = Tween<double>(begin: 0.95, end: 1.1).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeInOut,

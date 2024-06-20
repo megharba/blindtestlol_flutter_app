@@ -48,8 +48,8 @@ class _BoutiquePageState extends State<BoutiquePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Boutique'),
-        backgroundColor:
-            AppColors.colorTextTitle, // Remplacez par votre couleur préférée
+        backgroundColor: AppColors.colorNoirHextech,
+        foregroundColor: AppColors.colorTextTitle,
       ),
       body: Container(
         decoration: BoxDecoration(

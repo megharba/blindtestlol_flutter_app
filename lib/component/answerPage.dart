@@ -39,8 +39,10 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
   final _formKey = GlobalKey<FormState>();
   final GameService gameService = GameService('http://localhost:8080');
   final AudioPlayer _audioPlayer = AudioPlayer();
-  final TextEditingController _propositionController = TextEditingController();
-  final TextEditingController _typeController = TextEditingController();
+  final TextEditingController _propositionController =
+      TextEditingController(text: "NOM DE LA MUSIQUE");
+  final TextEditingController _typeController =
+      TextEditingController(text: "TYPE DE LA MUSIQUE");
   final TextEditingController _dateController = TextEditingController();
 
   late AnimationController _animationController;
@@ -74,6 +76,8 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
       begin: widget.totalRounds > 0 ? currentRound / widget.totalRounds : 0,
       end: widget.totalRounds > 0 ? currentRound / widget.totalRounds : 0,
     ).animate(_animationController);
+    _propositionController.text = "NOM DE LA MUSIQUE";
+    _typeController.text = "TYPE DE LA MUSIQUE";
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
@@ -260,7 +264,8 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                 Navigator.of(context).pop();
                 await Future.delayed(Duration(milliseconds: 300));
                 if (playRoundResponse != null) {
-                  _showNextCountdownAndPlayMusic(playRoundResponse.token, apiResponse.player.score, apiResponse.player.combo);
+                  _showNextCountdownAndPlayMusic(playRoundResponse.token,
+                      apiResponse.player.score, apiResponse.player.combo);
                 }
                 // Mettre à jour _randomImagePath pour le nouveau round
                 _initRandomImagePath();
@@ -369,7 +374,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                     children: [
                       TextFormField(
                         controller: _propositionController,
-                        style: const TextStyle(color: AppColors.colorTextTitle),
+                        style: const TextStyle(color: AppColors.colorText),
                         decoration: InputDecoration(
                           labelText: 'Quel est le nom de cette musique',
                           labelStyle:
@@ -386,7 +391,8 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                                 BorderSide(color: AppColors.colorTextTitle),
                           ),
                         ),
-                        validator: (value) => value!.isEmpty ? 'Ce champ est requis' : null,
+                        validator: (value) =>
+                            value!.isEmpty ? 'Ce champ est requis' : null,
                       ),
                       const SizedBox(height: 20),
                       DropdownButtonFormField<String>(
@@ -417,7 +423,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                           });
                         },
                         decoration: const InputDecoration(
-                          labelText: 'Quel est le Type de cette musique ?',
+                          labelText: 'Quel est le type de cette musique ?',
                           labelStyle:
                               TextStyle(color: AppColors.colorTextTitle),
                           enabledBorder: OutlineInputBorder(
@@ -429,7 +435,8 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                                 BorderSide(color: AppColors.colorTextTitle),
                           ),
                         ),
-                        validator: (value) => value == null ? 'Ce champ est requis' : null,
+                        validator: (value) =>
+                            value == null ? 'Ce champ est requis' : null,
                       ),
                       const SizedBox(height: 20),
                       DropdownButtonFormField<int>(
@@ -467,7 +474,8 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                                 BorderSide(color: AppColors.colorTextTitle),
                           ),
                         ),
-                        validator: (value) => value == null ? 'Ce champ est requis' : null,
+                        validator: (value) =>
+                            value == null ? 'Ce champ est requis' : null,
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(

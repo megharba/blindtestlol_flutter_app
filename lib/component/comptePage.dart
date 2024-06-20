@@ -29,8 +29,8 @@ class _ComptePageState extends State<ComptePage>
   void initState() {
     super.initState();
     nameController = TextEditingController(text: widget.user.name);
-    emailController = TextEditingController(
-        text: widget.user.name); // Utilisation du bon champ
+    emailController =
+        TextEditingController(text: widget.user.email); // Correction ici
 
     // Animation setup
     _animationController = AnimationController(
@@ -60,7 +60,8 @@ class _ComptePageState extends State<ComptePage>
     return Scaffold(
       appBar: AppBar(
         title: Text('Mon Compte'),
-        backgroundColor: AppColors.colorTextTitle,
+        backgroundColor: AppColors.colorNoirHextech,
+        foregroundColor: AppColors.colorTextTitle,
       ),
       body: Stack(
         children: [
@@ -124,46 +125,8 @@ class _ComptePageState extends State<ComptePage>
                   Expanded(
                     child: Align(
                       alignment: Alignment.bottomCenter,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (passwordController.text ==
-                              confirmPasswordController.text) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    'Modifications sauvegardées avec succès.'),
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    'Les mots de passe ne correspondent pas.'),
-                              ),
-                            );
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.black,
-                          backgroundColor: AppColors
-                              .colorTextTitle, // Couleur du texte du bouton
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(0), // Forme rectangulaire
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 12.0, horizontal: 24.0),
-                          child: Text(
-                            'Sauvegarder les modifications',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: 'CustomFont2',
-                            ),
-                          ),
-                        ),
-                      ),
+                      child:
+                          _buildSaveButton(), // Utilisation du bouton personnalisé
                     ),
                   ),
                 ],
@@ -176,6 +139,46 @@ class _ComptePageState extends State<ComptePage>
     );
   }
 
+  // Méthode pour construire le bouton personnalisé
+  Widget _buildSaveButton() {
+    return ElevatedButton(
+      onPressed: () {
+        if (passwordController.text == confirmPasswordController.text) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Modifications sauvegardées avec succès.'),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Les mots de passe ne correspondent pas.'),
+            ),
+          );
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        foregroundColor: AppColors.colorTextTitle,
+        backgroundColor:
+            AppColors.colorNoirHextech, // Couleur du texte du bouton
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0), // Bord arrondi
+          side: BorderSide(
+              color: AppColors.colorTextTitle, width: 2.0), // Bordure
+        ),
+        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
+      ),
+      child: Text(
+        'Sauvegarder les modifications',
+        style: TextStyle(
+          fontSize: 16,
+          fontFamily: 'CustomFont2',
+        ),
+      ),
+    );
+  }
+
+  // Widget pour construire un champ éditable
   Widget _buildEditableField(String label, TextEditingController controller,
       {bool isPassword = false}) {
     return Container(

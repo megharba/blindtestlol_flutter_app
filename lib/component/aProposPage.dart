@@ -13,10 +13,11 @@ class AProposPage extends StatelessWidget {
           'À propos de nous',
           style: TextStyle(
             fontFamily: 'CustomFont1',
-            color: AppColors.colorText,
+            color: AppColors.colorTextTitle,
           ),
         ),
-        backgroundColor: AppColors.colorTextTitle,
+        backgroundColor: AppColors.colorNoirHextech,
+        foregroundColor: AppColors.colorTextTitle,
       ),
       body: Stack(
         children: [
@@ -62,6 +63,8 @@ class AProposPage extends StatelessWidget {
 
   Widget _buildParagraph(String text, {bool isTitle = false}) {
     return Container(
+      width: double
+          .infinity, // Utiliser une largeur maximale pour le conteneur de texte
       margin: EdgeInsets.symmetric(vertical: 8.0),
       padding: EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -75,7 +78,7 @@ class AProposPage extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          fontSize: isTitle ? 20 : 16, // Increased font size for readability
+          fontSize: isTitle ? 20 : 16,
           fontWeight: isTitle ? FontWeight.bold : FontWeight.normal,
           color: Colors.white,
           fontFamily: isTitle ? 'CustomFont1' : 'CustomFont2',
@@ -86,49 +89,34 @@ class AProposPage extends StatelessWidget {
 
   Widget _buildGameLinks(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: _buildGameLink(
-                context,
-                'League of Legends',
-                'https://leagueoflegends.fandom.com/fr/wiki/League_of_Legends',
-                AproposAssets.apropos1,
-              ),
-            ),
-            SizedBox(width: 8),
-            Expanded(
-              child: _buildGameLink(
-                context,
-                'Runeterra',
-                'https://leagueoflegends.fandom.com/fr/wiki/Runeterra',
-                AproposAssets.apropos2,
-              ),
-            ),
-          ],
+        _buildGameLink(
+          context,
+          'League of Legends',
+          'https://leagueoflegends.fandom.com/fr/wiki/League_of_Legends',
+          AproposAssets.apropos1,
         ),
         SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: _buildGameLink(
-                context,
-                'Teamfight Tactics',
-                'https://leagueoflegends.fandom.com/wiki/Teamfight_Tactics',
-                AproposAssets.apropos3,
-              ),
-            ),
-            SizedBox(width: 8),
-            Expanded(
-              child: _buildGameLink(
-                context,
-                'Arcane',
-                'https://leagueoflegends.fandom.com/fr/wiki/Arcane',
-                AproposAssets.apropos4,
-              ),
-            ),
-          ],
+        _buildGameLink(
+          context,
+          'Runeterra',
+          'https://leagueoflegends.fandom.com/fr/wiki/Runeterra',
+          AproposAssets.apropos2,
+        ),
+        SizedBox(height: 16),
+        _buildGameLink(
+          context,
+          'Teamfight Tactics',
+          'https://leagueoflegends.fandom.com/wiki/Teamfight_Tactics',
+          AproposAssets.apropos3,
+        ),
+        SizedBox(height: 16),
+        _buildGameLink(
+          context,
+          'Arcane',
+          'https://leagueoflegends.fandom.com/fr/wiki/Arcane',
+          AproposAssets.apropos4,
         ),
       ],
     );
@@ -136,6 +124,8 @@ class AProposPage extends StatelessWidget {
 
   Widget _buildGameLink(
       BuildContext context, String text, String url, String assetPath) {
+    const double imageHeight = 150.0; // Define a constant height for images
+
     return GestureDetector(
       onTap: () => _launchURL(context, url),
       child: Container(
@@ -153,12 +143,12 @@ class AProposPage extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              height: 150, // Adjust height as needed
+              height: imageHeight, // Use the defined constant height
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.asset(
                   assetPath,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover, // Adjust the fit as per your requirement
                 ),
               ),
             ),

@@ -35,6 +35,13 @@ class _BackgroundVideoState extends State<BackgroundVideo> {
   }
 
   @override
+  void deactivate() {
+    // This method is called when the widget is removed from the tree, e.g., navigating to another page.
+    _controller.pause(); // Pause the video
+    super.deactivate();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: _initializeVideoPlayerFuture,
