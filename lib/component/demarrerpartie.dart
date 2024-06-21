@@ -24,7 +24,8 @@ class _AccueilPageState extends State<AccueilPage> {
     _audioPlayer.play(AssetSource(filePath));
   }
 
-  void _showCountdownAndPlayMusic(String musicId, String musicName, String musicType, String musicDate) {
+  void _showCountdownAndPlayMusic(
+      String musicId, String musicName, String musicType, String musicDate) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AnswerPhasePage(
@@ -45,13 +46,15 @@ class _AccueilPageState extends State<AccueilPage> {
         await gameService.createGame(widget.user.uid, 0); // No rounds
     currentGameId = gameResponse.gameId;
 
-    final PlayRoundResponse? initialRoundResponse = await gameService.playRound(currentGameId!);
+    final PlayRoundResponse? initialRoundResponse =
+        await gameService.playRound(currentGameId!);
     if (initialRoundResponse != null) {
       final initialMusicId = initialRoundResponse.token;
       final initialMusicName = initialRoundResponse.name;
       final initialMusicType = initialRoundResponse.type;
       final initialMusicDate = initialRoundResponse.date;
-      _showCountdownAndPlayMusic(initialMusicId, initialMusicName, initialMusicType, initialMusicDate);
+      _showCountdownAndPlayMusic(
+          initialMusicId, initialMusicName, initialMusicType, initialMusicDate);
     } else {
       print('Aucun ID de musique initial reçu.');
     }

@@ -81,7 +81,10 @@ class ProfilPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => BoutiquePage()),
+                    MaterialPageRoute(
+                        builder: (context) => BoutiquePage(
+                              user: user,
+                            )),
                   );
                 },
               ),

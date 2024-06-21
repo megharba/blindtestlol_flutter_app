@@ -148,7 +148,7 @@ class AProposPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.asset(
                   assetPath,
-                  fit: BoxFit.cover, // Adjust the fit as per your requirement
+                  fit: BoxFit.fill, // Adjust the fit as per your requirement
                 ),
               ),
             ),

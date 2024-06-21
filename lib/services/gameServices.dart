@@ -28,7 +28,8 @@ class GameService {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        final playRoundResponse = PlayRoundResponse.fromJson(jsonDecode(response.body));
+        final playRoundResponse =
+            PlayRoundResponse.fromJson(jsonDecode(response.body));
         print('playRound response: $playRoundResponse');
         return playRoundResponse;
       } else {

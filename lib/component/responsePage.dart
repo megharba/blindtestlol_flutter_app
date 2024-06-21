@@ -78,7 +78,8 @@ class ResponsePage extends StatelessWidget {
                         ),
                         child: ClipOval(
                           child: Image.asset(
-                            ImageAssets.imageLegende1,
+                            "test",
+                            //"assets/images/legendes/" + avatarToken + ".png",
                             width: 80,
                             height: 80,
                             fit: BoxFit.cover,

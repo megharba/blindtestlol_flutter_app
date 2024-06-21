@@ -2,45 +2,72 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 
-import '../utils/utils.dart'; // Assurez-vous d'importer vos utilitaires personnalisés ici
+import 'package:blindtestlol_flutter_app/models/models.dart';
+import 'package:blindtestlol_flutter_app/services/userServices.dart';
+
+import '../utils/utils.dart';
 
 class BoutiquePage extends StatefulWidget {
+  final User user;
+  const BoutiquePage({required this.user});
   @override
   _BoutiquePageState createState() => _BoutiquePageState();
 }
 
 class _BoutiquePageState extends State<BoutiquePage> {
   List<String> imagePaths = [];
-  List<String> imageNames = []; // Liste pour stocker les noms des images
+  List<String> imageNames = []; // List to store image names
 
   @override
   void initState() {
     super.initState();
-    _loadImages();
+    _loadAvatars();
   }
 
-  Future<void> _loadImages() async {
-    List<String> paths = await loadImagesFromAssets('assets/images/legendes/');
-    setState(() {
-      imagePaths = paths;
-      imageNames = paths
-          .map((path) => _getFileName(path))
-          .toList(); // Récupérer les noms des fichiers
-    });
+  Future<void> _loadAvatars() async {
+    try {
+      List<Avatar> fetchedAvatars =
+          await UserService().getAllAvatars(widget.user.uid);
+
+      setState(() {
+        // Populate imagePaths and imageNames based on fetched avatars
+        imagePaths = fetchedAvatars.map((avatar) {
+          return 'assets/images/legendes/${avatar.token}.png';
+        }).toList();
+
+        imageNames = fetchedAvatars.map((avatar) => avatar.token).toList();
+      });
+
+      // Print avatar tokens for verification
+      for (var avatar in fetchedAvatars) {
+        print('${avatar.token}');
+      }
+    } catch (e) {
+      print('Failed to load avatars: $e');
+      // Handle error loading avatars
+    }
   }
 
-  String _getFileName(String path) {
-    // Extraire le nom du fichier sans l'extension à partir du chemin complet
-    String fileNameWithExtension = path.split('/').last;
-    return fileNameWithExtension
-        .split('.')
-        .first; // Retourner le nom du fichier sans l'extension
-  }
+  Future<void> _handleBuyAvatar(String imageName, int avatarId) async {
+    try {
+      await UserService().buyAvatar(widget.user.uid, avatarId);
 
-  Future<List<String>> loadImagesFromAssets(String path) async {
-    final manifestContent = await rootBundle.loadString('AssetManifest.json');
-    final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-    return manifestMap.keys.where((String key) => key.contains(path)).toList();
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Vous avez acheté $imageName avec succès !'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } catch (e) {
+      // Handle error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erreur lors de l\'achat de $imageName : $e'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   @override
@@ -49,7 +76,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
       appBar: AppBar(
         title: Text('Boutique'),
         backgroundColor: AppColors.colorNoirHextech,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.colorTextTitle,
       ),
       body: Container(
         child: Padding(
@@ -63,8 +90,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
             ),
             itemCount: imagePaths.length,
             itemBuilder: (context, index) {
-              return _buildGridItem(context, index,
-                  imageNames[index]); // Passer le nom de l'image à afficher
+              return _buildGridItem(context, index, imageNames[index]);
             },
           ),
         ),
@@ -74,9 +100,12 @@ class _BoutiquePageState extends State<BoutiquePage> {
 
   Widget _buildGridItem(BuildContext context, int index, String imageName) {
     String imagePath = imagePaths[index];
+    int avatarId = index + 1;
+
     return GestureDetector(
       onTap: () {
-        // Action lors du clic sur une case
+        // Handle tap on avatar item
+        _handleBuyAvatar(imageName, avatarId);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -100,9 +129,52 @@ class _BoutiquePageState extends State<BoutiquePage> {
             Expanded(
               child: ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-                child: Image.asset(
-                  imagePath,
-                  fit: BoxFit.cover,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.asset(
+                      imagePath,
+                      fit: BoxFit.cover,
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black54,
+                          borderRadius: BorderRadius.vertical(
+                              bottom: Radius.circular(20.0)),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 4.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Image.asset(
+                              ImageAssets.imageShop,
+                              width: 24,
+                              height: 24,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              '200000',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Image.asset(
+                              ImageAssets.imageEssenceBleue,
+                              width: 24,
+                              height: 24,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -114,13 +186,12 @@ class _BoutiquePageState extends State<BoutiquePage> {
                     BorderRadius.vertical(bottom: Radius.circular(20.0)),
               ),
               child: Text(
-                imageName, // Afficher le nom de l'image ici
+                imageName,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
-                  fontFamily:
-                      'CustomFont2', // Remplacez par votre police préférée
+                  fontFamily: 'CustomFont2',
                 ),
               ),
             ),
@@ -129,10 +200,4 @@ class _BoutiquePageState extends State<BoutiquePage> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: BoutiquePage(),
-  ));
 }

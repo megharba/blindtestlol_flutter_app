@@ -184,6 +184,7 @@ class User {
   final String name;
   final String uid;
   final String email;
+  final String avatarToken;
   final int gamePlayed;
   final List<HighScore> highScore;
   final int totalScore;
@@ -193,6 +194,7 @@ class User {
     required this.name,
     required this.uid,
     required this.email,
+    required this.avatarToken,
     required this.gamePlayed,
     required this.highScore,
     required this.totalScore,
@@ -208,6 +210,7 @@ class User {
       name: json['name'],
       uid: json['uid'],
       email: json['email'],
+      avatarToken: json['avatarToken'],
       gamePlayed: json['gamePlayed'],
       highScore: highScoreItems,
       totalScore: json['totalScore'],
@@ -220,10 +223,31 @@ class User {
       'name': name,
       'uid': uid,
       'email': email,
+      'avatarToken': avatarToken,
       'gamePlayed': gamePlayed,
       'highScore': highScore.map((i) => i.toJson()).toList(),
       'totalScore': totalScore,
     };
+  }
+}
+
+class Avatar {
+  final int id;
+  final String token;
+  final int price;
+
+  Avatar({
+    required this.id,
+    required this.token,
+    required this.price,
+  });
+
+  factory Avatar.fromJson(Map<String, dynamic> json) {
+    return Avatar(
+      id: json['id'],
+      token: json['token'],
+      price: json['price'],
+    );
   }
 }
 

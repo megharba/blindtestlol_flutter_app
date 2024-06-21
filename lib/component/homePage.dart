@@ -10,7 +10,6 @@ import 'background_video.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
-
   const HomePage({required this.user});
 
   @override
@@ -79,7 +78,7 @@ class _HomePageState extends State<HomePage>
               offset: const Offset(0, -320),
               child: BackgroundVideo(
                 videoPath: Mp4Assets.imageBackgroundParticle,
-                fit: BoxFit.fill, // Specify BoxFit.fill for HomePage
+                fit: BoxFit.fill,
               ),
             ),
           ),
@@ -175,7 +174,9 @@ class _HomePageState extends State<HomePage>
                         ),
                         child: ClipOval(
                           child: Image.asset(
-                            ImageAssets.imageLegende1,
+                            "assets/images/legendes/" +
+                                widget.user.avatarToken +
+                                ".png",
                             width: 80,
                             height: 80,
                             fit: BoxFit.cover,

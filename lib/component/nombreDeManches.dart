@@ -27,7 +27,8 @@ class _NombreDeManchesState extends State<NombreDeManches> {
     _audioPlayer.play(AssetSource(filePath));
   }
 
-  void _showCountdownAndPlayMusic(String musicId, String musicName, String musicType, String musicDate) {
+  void _showCountdownAndPlayMusic(
+      String musicId, String musicName, String musicType, String musicDate) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AnswerPhasePage(
@@ -50,7 +51,8 @@ class _NombreDeManchesState extends State<NombreDeManches> {
     currentRound = 1;
     totalRounds = nombreManches;
 
-    final PlayRoundResponse? playRoundResponse = await gameService.playRound(currentGameId!);
+    final PlayRoundResponse? playRoundResponse =
+        await gameService.playRound(currentGameId!);
     if (playRoundResponse != null) {
       _showCountdownAndPlayMusic(
         playRoundResponse.token,

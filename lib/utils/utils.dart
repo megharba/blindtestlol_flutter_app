@@ -29,7 +29,7 @@ class ImageAssets {
   static const String soulignement =
       'assets/images/backgrounds/decorator-hr-lg.png';
   static const String title = 'assets/images/logo/title.png';
-  static const String imageLegende1 = 'assets/images/legendes/default.jpeg';
+  static const String imageLegende1 = 'assets/images/legendes/globouille.png';
   static const String imageBackground =
       'assets/images/backgrounds/background.jpg';
   static const String imageBackgroundHeader =
@@ -59,7 +59,6 @@ class ImageAssets {
       'assets/images/backgrounds/abeilleMecontente.png';
   static const String abeilleContente =
       'assets/images/backgrounds/abeilleContente.png';
-  static const String imageShop = 'assets/images/backgrounds/shop.png';
   static const String imageCoinGif = 'assets/images/logo/coin.gif';
   static const String imageMasteryDefault = 'assets/images/logo/mastery.png';
   static const String imageBackground1 =
@@ -73,6 +72,7 @@ class ImageAssets {
   static const String imageBackgroundSeraphine =
       'assets/images/logo/seraphine.png';
   static const String imageCurseur = 'assets/images/logo/curseur.png';
+  static const String imageShop = 'assets/images/logo/shop.png';
 }
 
 class Mp4Assets {

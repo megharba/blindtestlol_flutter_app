@@ -87,7 +87,9 @@ class _ComptePageState extends State<ComptePage>
                     children: [
                       CircleAvatar(
                         radius: 50,
-                        backgroundImage: AssetImage(ImageAssets.imageLegende1),
+                        backgroundImage: AssetImage("assets/images/legendes/" +
+                            widget.user.avatarToken +
+                            ".png"),
                       ),
                       Positioned(
                         right: -30,
