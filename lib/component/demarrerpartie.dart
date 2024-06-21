@@ -29,6 +29,7 @@ class _AccueilPageState extends State<AccueilPage> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AnswerPhasePage(
+          user: widget.user,
           gameId: currentGameId ?? '',
           currentRound: 1,
           totalRounds: 0,

@@ -5,7 +5,7 @@ import 'package:blindtestlol_flutter_app/component/accueilPage.dart';
 import 'package:blindtestlol_flutter_app/component/classementPage.dart';
 import 'package:blindtestlol_flutter_app/models/models.dart';
 import 'package:blindtestlol_flutter_app/component/comptePage.dart'; // Import the ComptePage
-
+import 'package:blindtestlol_flutter_app/services/userServices.dart';
 import 'background_video.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,15 +20,41 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
   late List<Widget> _widgetOptions;
+  final UserService _userService = UserService();
+  late User _user;
 
   @override
   void initState() {
     super.initState();
+    _user = widget.user;
     _widgetOptions = <Widget>[
-      AccueilPage(user: widget.user),
-      ProfilPage(user: widget.user),
+      AccueilPage(user: _user),
+      ProfilPage(user: _user),
       ClassementPage(),
     ];
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _fetchUserScore();
+  }
+
+  Future<void> _fetchUserScore() async {
+    try {
+      User updatedUser = await _userService.getUser(widget.user.uid);
+      setState(() {
+        _user = updatedUser;
+        _widgetOptions = <Widget>[
+          AccueilPage(user: _user),
+          ProfilPage(user: _user),
+          ClassementPage(),
+        ];
+      });
+    } catch (e) {
+      // Handle error
+      print('Failed to fetch user score: $e');
+    }
   }
 
   void _onItemTapped(int index) {
@@ -42,15 +68,13 @@ class _HomePageState extends State<HomePage>
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            ProfilPage(user: widget.user),
+            ProfilPage(user: _user),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(1.0, 0.0);
           const end = Offset.zero;
           const curve = Curves.ease;
-
           var tween =
               Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
           return SlideTransition(
             position: animation.drive(tween),
             child: child,
@@ -63,7 +87,7 @@ class _HomePageState extends State<HomePage>
   void _goToCompte() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ComptePage(user: widget.user)),
+      MaterialPageRoute(builder: (context) => ComptePage(user: _user)),
     );
   }
 
@@ -118,7 +142,7 @@ class _HomePageState extends State<HomePage>
                             children: [
                               // Nom d'utilisateur
                               Text(
-                                widget.user.name,
+                                _user.name,
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontFamily: 'CustomFont1',
@@ -132,7 +156,7 @@ class _HomePageState extends State<HomePage>
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text(
-                                    'Points: ${widget.user.totalScore.toString()}',
+                                    'Points: ${_user.totalScore.toString()}',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontFamily: 'CustomFont2',
@@ -175,7 +199,7 @@ class _HomePageState extends State<HomePage>
                         child: ClipOval(
                           child: Image.asset(
                             "assets/images/legendes/" +
-                                widget.user.avatarToken +
+                                _user.avatarToken +
                                 ".png",
                             width: 80,
                             height: 80,

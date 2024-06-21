@@ -187,7 +187,7 @@ class User {
   final String avatarToken;
   final int gamePlayed;
   final List<HighScore> highScore;
-  final int totalScore;
+  int totalScore;
 
   User({
     required this.id,
@@ -227,6 +227,42 @@ class User {
       'gamePlayed': gamePlayed,
       'highScore': highScore.map((i) => i.toJson()).toList(),
       'totalScore': totalScore,
+    };
+  }
+}
+
+class UserAvatar {
+  final int id;
+  final User user;
+  final int id_avatar;
+  final bool isSelectable;
+  final bool isSelected;
+
+  UserAvatar({
+    required this.id,
+    required this.user,
+    required this.id_avatar,
+    required this.isSelectable,
+    required this.isSelected,
+  });
+
+  factory UserAvatar.fromJson(Map<String, dynamic> json) {
+    return UserAvatar(
+      id: json['id_liaison_avatar_utilisateur'],
+      user: User.fromJson(json['user']),
+      id_avatar: json['id_avatar'],
+      isSelectable: json['lau_selectionnable'],
+      isSelected: json['lau_selectione'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id_liaison_avatar_utilisateur': id,
+      'user': user.toJson(),
+      'avatar': id_avatar,
+      'lau_selectionnable': isSelectable,
+      'lau_selectione': isSelected,
     };
   }
 }

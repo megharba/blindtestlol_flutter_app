@@ -53,15 +53,31 @@ class UserService {
     }
   }
 
+  Future<User> getUser(String userUid) async {
+    final url = Uri.parse('${baseUrl}user/get?uid=$userUid');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      return User.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to connect user. Status: ${response.statusCode}');
+    }
+  }
+
   Future<List<Avatar>> getAllAvatars(String userUid) async {
-    final url = Uri.parse(
-        '${baseUrl}user/avatars?uid=$userUid'); // Adjust endpoint as per your server
+    final url = Uri.parse('${baseUrl}user/avatars?uid=$userUid');
 
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
       Iterable list = jsonDecode(response.body);
-      return List<Avatar>.from(list.map((model) => Avatar.fromJson(model)));
+      List<Avatar> avatars =
+          List<Avatar>.from(list.map((model) => Avatar.fromJson(model)));
+
+      // Tri des avatars par prix croissant
+      avatars.sort((a, b) => a.price.compareTo(b.price));
+
+      return avatars;
     } else {
       throw Exception('Failed to load avatars. Status: ${response.statusCode}');
     }

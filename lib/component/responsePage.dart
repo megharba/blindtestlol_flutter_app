@@ -1,7 +1,9 @@
+import 'package:blindtestlol_flutter_app/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:blindtestlol_flutter_app/utils/utils.dart';
 
 class ResponsePage extends StatelessWidget {
+  final User user;
   final int score;
   final int combo;
   final String musicToken;
@@ -21,6 +23,7 @@ class ResponsePage extends StatelessWidget {
     required this.userProposition,
     required this.correctedName,
     required this.onNextRound,
+    required this.user,
   }) : super(key: key);
 
   Widget _buildComboImage(int combo) {
@@ -78,8 +81,9 @@ class ResponsePage extends StatelessWidget {
                         ),
                         child: ClipOval(
                           child: Image.asset(
-                            "test",
-                            //"assets/images/legendes/" + avatarToken + ".png",
+                            "assets/images/legendes/" +
+                                user.avatarToken +
+                                ".png",
                             width: 80,
                             height: 80,
                             fit: BoxFit.cover,

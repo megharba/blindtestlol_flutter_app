@@ -11,6 +11,7 @@ import 'package:blindtestlol_flutter_app/component/responsePage.dart';
 import 'package:flutter/services.dart';
 
 class AnswerPhasePage extends StatefulWidget {
+  final User user;
   final String gameId;
   final int totalRounds;
   final int currentRound;
@@ -21,6 +22,7 @@ class AnswerPhasePage extends StatefulWidget {
 
   const AnswerPhasePage({
     Key? key,
+    required this.user,
     required this.gameId,
     required this.totalRounds,
     required this.currentRound,
@@ -226,6 +228,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => ResponsePage(
+              user: widget.user,
               score: apiResponse.player.score,
               combo: apiResponse.player.combo,
               musicToken: previousMusicToken!,
@@ -253,6 +256,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => ResponsePage(
+              user: widget.user,
               score: apiResponse.player.score,
               combo: apiResponse.player.combo,
               musicToken: previousMusicToken!,

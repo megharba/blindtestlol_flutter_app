@@ -255,6 +255,7 @@ class _ModesDeJeuPageState extends State<ModesDeJeuPage>
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AnswerPhasePage(
+          user: widget.user,
           gameId: widget.currentGameId ?? '',
           currentRound: widget.currentRound,
           totalRounds: widget.totalRounds,

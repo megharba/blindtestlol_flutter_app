@@ -9,14 +9,14 @@ import '../utils/utils.dart';
 
 class BoutiquePage extends StatefulWidget {
   final User user;
+
   const BoutiquePage({required this.user});
   @override
   _BoutiquePageState createState() => _BoutiquePageState();
 }
 
 class _BoutiquePageState extends State<BoutiquePage> {
-  List<String> imagePaths = [];
-  List<String> imageNames = []; // List to store image names
+  late List<Avatar> avatars = [];
 
   @override
   void initState() {
@@ -30,12 +30,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
           await UserService().getAllAvatars(widget.user.uid);
 
       setState(() {
-        // Populate imagePaths and imageNames based on fetched avatars
-        imagePaths = fetchedAvatars.map((avatar) {
-          return 'assets/images/legendes/${avatar.token}.png';
-        }).toList();
-
-        imageNames = fetchedAvatars.map((avatar) => avatar.token).toList();
+        avatars = fetchedAvatars;
       });
 
       // Print avatar tokens for verification
@@ -59,6 +54,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
           duration: Duration(seconds: 2),
         ),
       );
+      // a voir - await UserService().getUser(widget.user.uid).then((User) => widget.user = User)
     } catch (e) {
       // Handle error
       ScaffoldMessenger.of(context).showSnackBar(
@@ -88,9 +84,10 @@ class _BoutiquePageState extends State<BoutiquePage> {
               mainAxisSpacing: 16.0,
               childAspectRatio: 0.8,
             ),
-            itemCount: imagePaths.length,
+            itemCount:
+                avatars.length, // Utiliser la longueur des avatars chargés
             itemBuilder: (context, index) {
-              return _buildGridItem(context, index, imageNames[index]);
+              return _buildGridItem(context, index, avatars[index]);
             },
           ),
         ),
@@ -98,14 +95,13 @@ class _BoutiquePageState extends State<BoutiquePage> {
     );
   }
 
-  Widget _buildGridItem(BuildContext context, int index, String imageName) {
-    String imagePath = imagePaths[index];
-    int avatarId = index + 1;
+  Widget _buildGridItem(BuildContext context, int index, Avatar avatar) {
+    String imagePath = 'assets/images/legendes/${avatar.token}.png';
 
     return GestureDetector(
       onTap: () {
-        // Handle tap on avatar item
-        _handleBuyAvatar(imageName, avatarId);
+        _handleBuyAvatar(avatar.token, avatar.id);
+        Navigator.pop(context, true);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -158,7 +154,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                             ),
                             SizedBox(width: 8),
                             Text(
-                              '200000',
+                              '${avatar.price.toStringAsFixed(0)}',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
@@ -186,7 +182,7 @@ class _BoutiquePageState extends State<BoutiquePage> {
                     BorderRadius.vertical(bottom: Radius.circular(20.0)),
               ),
               child: Text(
-                imageName,
+                avatar.token,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,

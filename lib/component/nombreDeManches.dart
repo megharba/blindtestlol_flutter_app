@@ -32,6 +32,7 @@ class _NombreDeManchesState extends State<NombreDeManches> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AnswerPhasePage(
+          user: widget.user,
           gameId: currentGameId ?? '',
           currentRound: currentRound,
           totalRounds: totalRounds,
