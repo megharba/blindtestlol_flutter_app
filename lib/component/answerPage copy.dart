@@ -42,7 +42,9 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
   late Animation<double> _animation;
   int currentRound = 1; // Initialisé à 1 comme prévu
   late String _randomImagePath =
-      'assets/images/gif/sticker_1.gif'; // initialize _randomImagePath here
+      'assets/images/gif/sticker_1.gif';
+      
+        get user => null; // initialize _randomImagePath here
 
   @override
   void initState() {
@@ -159,6 +161,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
               score: apiResponse.player.score,
               combo: apiResponse.player.combo,
               mastery: apiResponse.player.mastery,
+              user: user,
             ),
           ),
         );

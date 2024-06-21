@@ -75,8 +75,8 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
       duration: Duration(milliseconds: 500),
     );
     _animation = Tween<double>(
-      begin: widget.totalRounds > 0 ? currentRound / widget.totalRounds : 0,
-      end: widget.totalRounds > 0 ? currentRound / widget.totalRounds : 0,
+      begin: (currentRound - 1) / widget.totalRounds,
+      end: currentRound / widget.totalRounds,
     ).animate(_animationController);
     _propositionController.text = "NOM DE LA MUSIQUE";
     _typeController.text = "TYPE DE LA MUSIQUE";
@@ -198,21 +198,23 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
       final playRoundResponse = await gameService.playRound(widget.gameId);
 
       setState(() {
-        currentRound = apiResponse.round;
+        currentRound = apiResponse.round + 1;
         currentScore = apiResponse.player.score;
         currentCombo = apiResponse.player.combo;
+
+        // Set the animation values to correctly reflect the current round
         _animation = Tween<double>(
-          begin: _animation.value,
-          end: widget.totalRounds > 0 ? currentRound / widget.totalRounds : 0,
+          begin: (currentRound - 1) / widget.totalRounds,
+          end: currentRound / widget.totalRounds,
         ).animate(_animationController);
         _animationController.forward(from: 0.0);
         showRoundCountdown = false;
 
         // Set corrected values from the previous playRoundResponse
-        previousMusicType = apiResponse.musicPlayed[currentRound - 1].type;
-        previousMusicDate = apiResponse.musicPlayed[currentRound - 1].date;
-        previousCorrectedName = apiResponse.musicPlayed[currentRound - 1].name;
-        previousMusicToken = apiResponse.musicPlayed[currentRound - 1].token;
+        previousMusicType = apiResponse.musicPlayed[apiResponse.round - 1].type;
+        previousMusicDate = apiResponse.musicPlayed[apiResponse.round - 1].date;
+        previousCorrectedName = apiResponse.musicPlayed[apiResponse.round - 1].name;
+        previousMusicToken = apiResponse.musicPlayed[apiResponse.round - 1].token;
 
         // Update the current music info for the next round
         correctedName = playRoundResponse?.name;
@@ -245,6 +247,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
                       score: apiResponse.player.score,
                       combo: apiResponse.player.combo,
                       mastery: apiResponse.player.mastery,
+                      user: widget.user
                     ),
                   ),
                 );
@@ -338,7 +341,7 @@ class _AnswerPhasePageState extends State<AnswerPhasePage>
             ),
             const SizedBox(height: 10),
             Text(
-              'Manche $currentRound sur ${widget.totalRounds}',
+              'Manche ${currentRound} sur ${widget.totalRounds}',
               style: const TextStyle(
                 color: AppColors.colorText,
                 fontSize: 16,
